@@ -47,6 +47,7 @@
     "lint:fix": "automd && eslint . --fix && prettier -w .",
     "prepack": "pnpm build",
     "play": "pnpm capnp-es -ots,js,dts playground/*.capnp",
+    "prepare": "unbuild",
     "profile:bun": "bun run ./test/bench/profile.ts",
     "profile:node": "node --cpu-prof --import jiti/register ./test/bench/profile.ts",
     "release": "pnpm test && changelogen --release && npm publish && git push --follow-tags",
