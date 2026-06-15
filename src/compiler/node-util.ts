@@ -169,7 +169,7 @@ export function loadRequestedFile(
 
   const schema = lookupNode(ctx, file.id);
 
-  ctx.tsPath = schema.displayName.replace(/\.capnp$/, "") + ".ts";
+  ctx.tsPath = schema.displayName.replace(/\.(zap|capnp)$/, "") + ".ts";
 
   return ctx;
 }

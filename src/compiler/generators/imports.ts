@@ -52,9 +52,9 @@ export function generateNestedImports(ctx: CodeGeneratorFileContext): void {
     let importPath: string;
 
     if (name.startsWith("/capnp/")) {
-      importPath = `capnp-es/capnp/${name.slice(7).replace(/\.capnp$/, "")}`;
+      importPath = `capnp-es/capnp/${name.slice(7).replace(/\.(zap|capnp)$/, "")}`;
     } else {
-      importPath = name.replace(/\.capnp$/, ".js");
+      importPath = name.replace(/\.(zap|capnp)$/, ".js");
       if (importPath[0] !== ".") {
         importPath = `./${importPath}`;
       }
