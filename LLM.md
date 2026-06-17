@@ -1,7 +1,6 @@
-# capnp-es — AI Assistant Context
+# zap-es — ARCHIVED
 
-# 🔥 capnp-es
-
-<!-- automd:badges bundlephobia codecov -->
-
-[![npm version](https://img.shields.io/npm/v/capnp-es)](https://npmjs.com/package/capnp-es)
+TypeScript foundation for ZAP — Cap'n-Proto-style zero-copy serialization
+(`capnp-es` lineage). **Archived**: was the wire encoder used by `@hanzo/zap` /
+`@zap-proto/zap`. For the current TypeScript runtime see `~/work/zap/ts`
+(`@zap-proto/zap`).
