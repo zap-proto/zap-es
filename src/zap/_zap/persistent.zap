@@ -1,4 +1,4 @@
-# Source: https://github.com/capnproto/capnproto/blob/v1.0.2/c%2B%2B/src/capnp/persistent.capnp
+# Source: https://github.com/capnproto/capnproto/blob/v1.0.2/c++/src/capnp/persistent.capnp
 
 # Copyright (c) 2014 Sandstorm Development Group, Inc. and contributors
 # Licensed under the MIT License:
@@ -23,7 +23,7 @@
 
 @0xb8630836983feed7;
 
-$import "/capnp/c++.capnp".namespace("capnp");
+$import "/zap/c++.zap".namespace("zap");
 
 interface Persistent@0xc8cb212fcd9f5691(SturdyRef, Owner) {
   # Interface implemented by capabilities that outlive a single connection. A client may save()

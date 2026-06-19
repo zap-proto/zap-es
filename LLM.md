@@ -1,7 +1,7 @@
-# capnp-es — AI Assistant Context
+# zap-es — AI Assistant Context
 
-# 🔥 capnp-es
+# 🔥 zap-es
 
 <!-- automd:badges bundlephobia codecov -->
 
-[![npm version](https://img.shields.io/npm/v/capnp-es)](https://npmjs.com/package/capnp-es)
+[![npm version](https://img.shields.io/npm/v/zap-es)](https://npmjs.com/package/zap-es)

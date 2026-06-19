@@ -1,4 +1,4 @@
-# Source: https://github.com/capnproto/capnproto/blob/v1.0.2/c%2B%2B/src/capnp/schema.capnp
+# Source: https://github.com/capnproto/capnproto/blob/v1.0.2/c++/src/capnp/schema.capnp
 
 # Copyright (c) 2013-2014 Sandstorm Development Group, Inc. and contributors
 # Licensed under the MIT License:
@@ -21,10 +21,10 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 # THE SOFTWARE.
 
-using Cxx = import "/capnp/c++.capnp";
+using Cxx = import "/zap/c++.zap";
 
 @0xa93fc509624c72d9;
-$Cxx.namespace("capnp::schema");
+$Cxx.namespace("zap::schema");
 
 using Id = UInt64;
 # The globally-unique ID of a file, type, or annotation.
@@ -254,7 +254,7 @@ struct Field {
     # The original ordinal number given to the field.  You probably should NOT use this; if you need
     # a numeric identifier for a field, use its position within the field array for its scope.
     # The ordinal is given here mainly just so that the original schema text can be reproduced given
-    # the compiled version -- i.e. so that `capnp compile -ocapnp` can do its job.
+    # the compiled version -- i.e. so that `zap compile -ozap` can do its job.
   }
 }
 
@@ -491,19 +491,19 @@ enum ElementSize {
   inlineComposite @7;
 }
 
-struct CapnpVersion {
+struct ZapVersion {
   major @0 :UInt16;
   minor @1 :UInt8;
   micro @2 :UInt8;
 }
 
 struct CodeGeneratorRequest {
-  capnpVersion @2 :CapnpVersion;
-  # Version of the `capnp` executable. Generally, code generators should ignore this, but the code
-  # generators that ship with `capnp` itself will print a warning if this mismatches since that
+  zapVersion @2 :ZapVersion;
+  # Version of the `zap` executable. Generally, code generators should ignore this, but the code
+  # generators that ship with `zap` itself will print a warning if this mismatches since that
   # probably indicates something is misconfigured.
   #
-  # The first version of 'capnp' to set this was 0.6.0. So, if it's missing, the compiler version
+  # The first version of 'zap' to set this was 0.6.0. So, if it's missing, the compiler version
   # is older than that.
 
   nodes @0 :List(Node);

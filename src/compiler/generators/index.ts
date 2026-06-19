@@ -1,4 +1,4 @@
-import * as schema from "../../capnp/schema";
+import * as schema from "../../zap/schema";
 import { format } from "../../util";
 import * as E from "../errors";
 import { lookupNode, getFullClassName } from "../node-util";
@@ -7,7 +7,7 @@ import { generateInterfaceNode } from "./interface";
 import { generateStructNode } from "./struct";
 
 /**
- * Generates TypeScript code for a Cap'n Proto schema node.
+ * Generates TypeScript code for a ZAP schema node.
  * Handles different node types (struct, enum, interface) and their nested definitions.
  *
  * @param ctx - The file context containing schema information and output statements

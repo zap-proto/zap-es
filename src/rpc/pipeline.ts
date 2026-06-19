@@ -58,7 +58,7 @@ export class Pipeline<
       if (this.op.defaultValue) {
         copyFrom(this.op.defaultValue, t);
       } else {
-        initStruct(this.ResultsClass._capnp.size, t);
+        initStruct(this.ResultsClass._zap.size, t);
       }
     }
     return getAs(this.ResultsClass, t);

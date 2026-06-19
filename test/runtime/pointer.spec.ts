@@ -2,14 +2,14 @@
 
 import { test, assert as t } from "vitest";
 
-import { Message, Pointer, utils } from "capnp-es";
+import { Message, Pointer, utils } from "zap-es";
 import * as C from "src/constants";
 
 test("new Pointer()", () => {
   const m = new Message();
   const s = m.getSegment(0);
 
-  const initialTraversalLimit = m._capnp.traversalLimit;
+  const initialTraversalLimit = m._zap.traversalLimit;
 
   t.throws(
     () => {
@@ -21,7 +21,7 @@ test("new Pointer()", () => {
   const p = new Pointer(s, 4);
 
   t.equal(
-    m._capnp.traversalLimit,
+    m._zap.traversalLimit,
     initialTraversalLimit - 8,
     "should track pointer allocation in the message",
   );
@@ -48,7 +48,7 @@ test("new Pointer()", () => {
 
   t.equal(p.segment, s);
   t.equal(p.byteOffset, 4);
-  t.equal(p._capnp.depthLimit, C.MAX_DEPTH);
+  t.equal(p._zap.depthLimit, C.MAX_DEPTH);
 });
 
 test("Pointer.adopt(), Pointer.disown()", () => {

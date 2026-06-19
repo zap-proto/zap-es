@@ -1,14 +1,22 @@
-import { exec } from "node:child_process";
-import { compileAll } from "capnp-es/compiler";
+import { exec, spawnSync } from "node:child_process";
+import { compileAll } from "zap-es/compiler";
 import { test } from "vitest";
 import { writeFile } from "node:fs/promises";
 
 const projectDir = new URL("../../", import.meta.url);
 
-test("compiler:compile fixture", async () => {
+// This fixture relies on an external schema-frontend compiler that parses
+// *.zap text into a CodeGeneratorRequest on stdout (the project itself only
+// ships the code-generator plugins). Resolve it from $ZAP_COMPILER or fall
+// back to "zapc" on PATH; skip when no compiler is installed.
+const compiler = process.env.ZAP_COMPILER ?? "zapc";
+const hasCompiler =
+  spawnSync(compiler, ["--version"], { stdio: "ignore" }).error === undefined;
+
+test.skipIf(!hasCompiler)("compiler:compile fixture", async () => {
   const stdout = await new Promise<Buffer>((resolve, reject) => {
     exec(
-      `capnpc -o- test/fixtures/*.capnp`,
+      `${compiler} -o- test/fixtures/*.zap`,
       {
         encoding: "buffer",
       },

@@ -12,7 +12,7 @@ export type ServerTarget<S extends InterfaceCtor<unknown, Server>> =
   ConstructorParameters<S["Server"]>[0];
 
 export interface InterfaceCtor<C, S extends Server> {
-  readonly _capnp: {
+  readonly _zap: {
     displayName: string;
     id: string;
     size: ObjectSize;
@@ -25,7 +25,7 @@ export interface InterfaceCtor<C, S extends Server> {
 }
 
 export class Interface extends Pointer {
-  static readonly _capnp = {
+  static readonly _zap = {
     displayName: "Interface" as string,
   };
   static readonly getCapID = getCapID;
@@ -55,14 +55,14 @@ export class Interface extends Pointer {
       this.segment.id,
       this.byteOffset,
       this.getCapId(),
-      this._capnp.depthLimit,
+      this._zap.depthLimit,
     );
   }
 }
 
 export function getAsInterface(p: Pointer): Interface | null {
   if (getTargetPointerType(p) === PointerType.OTHER) {
-    return new Interface(p.segment, p.byteOffset, p._capnp.depthLimit);
+    return new Interface(p.segment, p.byteOffset, p._zap.depthLimit);
   }
   return null;
 }
@@ -80,7 +80,7 @@ export function getCapID(i: Interface): CapabilityID {
 
 export function getClient(i: Interface): Client | null {
   const capID = getCapID(i);
-  const { capTable } = i.segment.message._capnp;
+  const { capTable } = i.segment.message._zap;
   if (!capTable) {
     return null;
   }

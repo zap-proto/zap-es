@@ -4,7 +4,7 @@ import { ObjectSize } from "../object-size";
 import { type _StructCtor, Struct } from "./struct";
 
 export class Void extends Struct {
-  static readonly _capnp: _StructCtor = {
+  static readonly _zap: _StructCtor = {
     displayName: "Void",
     id: "0",
     size: new ObjectSize(0, 0),

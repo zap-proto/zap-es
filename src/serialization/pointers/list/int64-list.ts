@@ -5,7 +5,7 @@ import { _ListCtor, List } from "./list";
 import { getContent } from "../pointer.utils";
 
 export class Int64List extends List<bigint> {
-  static readonly _capnp: _ListCtor = {
+  static readonly _zap: _ListCtor = {
     displayName: "List<Int64>" as string,
     size: ListElementSize.BYTE_8,
   };

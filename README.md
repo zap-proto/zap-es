@@ -2,7 +2,7 @@
 
 > **This package is archived.** Its source has been absorbed into
 > **[`@zap-proto/zap`](https://github.com/zap-proto/ts) v2.0** — the ZAP
-> foundation layer (Cap'n-Proto codec + Level-4 RPC + compiler).
+> foundation layer (ZAP codec + Level-4 RPC + compiler).
 >
 > - Install: `pnpm add @zap-proto/zap`
 > - Repo: https://github.com/zap-proto/ts
@@ -25,8 +25,9 @@
 
 ---
 
-`zap-es` was the TypeScript Cap'n-Proto wire encoder for the ZAP binary RPC
-protocol — a fork of [`unjs/capnp-es`](https://github.com/unjs/capnp-es). It is
+`zap-es` was the TypeScript ZAP wire encoder for the ZAP binary RPC
+protocol — originally forked from the upstream
+[`unjs/capnp-es`](https://github.com/unjs/capnp-es) project (MIT). It is
 now `@zap-proto/zap` v2.0.
 
 ## License

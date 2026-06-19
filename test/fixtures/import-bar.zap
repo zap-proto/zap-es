@@ -2,7 +2,7 @@
 
 @0x9cbc682922e84ff9;
 
-using Foo = import "import-foo.capnp";
+using Foo = import "import-foo.zap";
 
 const foo :Foo.Foo = ();
 

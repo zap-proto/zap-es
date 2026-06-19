@@ -79,13 +79,13 @@ export function placeParams<P extends Struct, R extends Struct>(
     p = new call.method.ParamsClass(
       contentPtr.segment,
       contentPtr.byteOffset,
-      contentPtr._capnp.depthLimit,
+      contentPtr._zap.depthLimit,
     );
   } else {
     const msg = new Message();
     p = new call.method.ParamsClass(msg.getSegment(0), 0);
   }
-  initStruct(call.method.ParamsClass._capnp.size, p);
+  initStruct(call.method.ParamsClass._zap.size, p);
   if (call.paramsFunc) {
     call.paramsFunc(p);
   }

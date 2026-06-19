@@ -1,4 +1,4 @@
-import * as schema from "../../capnp/schema";
+import * as schema from "../../zap/schema";
 import { generateNode } from ".";
 import type { CodeGeneratorFileContext } from ".";
 import {
@@ -14,14 +14,14 @@ import * as E from "../errors";
 import { format } from "../../util";
 
 /**
- * Generates TypeScript classes for a Cap'n Proto RPC interface.
+ * Generates TypeScript classes for a ZAP RPC interface.
  *
  * This function creates all the necessary classes for an RPC interface:
  * - Parameter and result structs for each method
  * - Client class for making RPC calls
  * - Server class for implementing the interface
  *
- * The generated code follows the Cap'n Proto RPC protocol specification,
+ * The generated code follows the ZAP RPC protocol specification,
  * creating type-safe client/server implementations.
  *
  * @param ctx - The code generator context
@@ -39,7 +39,7 @@ export function generateInterfaceClasses(
 /**
  * Generates TypeScript structs for RPC method parameters and results.
  *
- * This function generates the necessary struct classes for each method in a Cap'n Proto
+ * This function generates the necessary struct classes for each method in a ZAP
  * RPC interface:
  * - Parameter structs that hold method arguments
  * - Result struct that hold method return values
@@ -62,7 +62,7 @@ export function generateMethodStructs(
 }
 
 /**
- * Generates a TypeScript server implementation for a Cap'n Proto RPC interface.
+ * Generates a TypeScript server implementation for a ZAP RPC interface.
  *
  * Creates a server class and target interface that implement the RPC service:
  * - Generates method signatures for all interface methods
@@ -136,7 +136,7 @@ export function generateServer(
 }
 
 /**
- * Generates a TypeScript client class for a Cap'n Proto RPC interface.
+ * Generates a TypeScript client class for a ZAP RPC interface.
  *
  * Creates a client class that provides type-safe method calls to a remote service:
  * - Generates method implementations for all interface methods
@@ -200,7 +200,7 @@ export function generateClient(
 }
 
 /**
- * Generates a TypeScript Promise wrapper class for Cap'n Proto RPC method results.
+ * Generates a TypeScript Promise wrapper class for ZAP RPC method results.
  *
  * Creates a Promise class that handles asynchronous RPC results:
  * - Manages pipelined method calls on promised results
@@ -291,7 +291,7 @@ export function generateResultPromise(
 }
 
 /**
- * Generates a client method implementation for a Cap'n Proto RPC interface.
+ * Generates a client method implementation for a ZAP RPC interface.
  *
  * Creates the method definition, type declaration, and implementation code for a single
  * RPC method in the client class. The generated code includes:

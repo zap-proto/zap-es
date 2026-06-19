@@ -39,10 +39,10 @@ export class Message {
   static readonly toArrayBuffer = toArrayBuffer;
   static readonly toPackedArrayBuffer = toPackedArrayBuffer;
 
-  readonly _capnp: _Message;
+  readonly _zap: _Message;
 
   /**
-   * A Cap'n Proto message.
+   * A ZAP message.
    *
    * SECURITY WARNING: In Node.js do not pass a Buffer's internal array buffer into this constructor. Pass the buffer
    * directly and everything will be fine. If not, your message will potentially be initialized with random memory
@@ -73,7 +73,7 @@ export class Message {
     packed = true,
     singleSegment = false,
   ) {
-    this._capnp = initMessage(src, packed, singleSegment);
+    this._zap = initMessage(src, packed, singleSegment);
 
     if (src) {
       preallocateSegments(this);
@@ -169,16 +169,16 @@ export class Message {
   }
 
   addCap(client: Client | null): number {
-    if (!this._capnp.capTable) {
-      this._capnp.capTable = [];
+    if (!this._zap.capTable) {
+      this._zap.capTable = [];
     }
-    const id = this._capnp.capTable.length;
-    this._capnp.capTable.push(client);
+    const id = this._zap.capTable.length;
+    this._zap.capTable.push(client);
     return id;
   }
 
   toString(): string {
-    return `Message_arena:${this._capnp.arena}`;
+    return `Message_arena:${this._zap.arena}`;
   }
 }
 
@@ -280,24 +280,24 @@ export function getFramedSegments(message: ArrayBuffer): ArrayBuffer[] {
  * @param m The message to allocate.
  */
 export function preallocateSegments(m: Message): void {
-  const numSegments = Arena.getNumSegments(m._capnp.arena);
+  const numSegments = Arena.getNumSegments(m._zap.arena);
 
   // if (numSegments < 1) throw new Error(MSG_NO_SEGMENTS_IN_ARENA);
 
-  m._capnp.segments = Array.from({ length: numSegments }) as Segment[];
+  m._zap.segments = Array.from({ length: numSegments }) as Segment[];
 
   for (let i = 0; i < numSegments; i++) {
     // Set up each segment so that they're fully allocated to the extents of the existing buffers.
 
-    if (i === 0 && Arena.getBuffer(i, m._capnp.arena).byteLength < 8) {
+    if (i === 0 && Arena.getBuffer(i, m._zap.arena).byteLength < 8) {
       // This is not a valid message if it can't fit a single pointer.
       throw new Error(MSG_SEGMENT_TOO_SMALL);
     }
 
-    const buffer = Arena.getBuffer(i, m._capnp.arena);
+    const buffer = Arena.getBuffer(i, m._zap.arena);
     const segment = new Segment(i, m, buffer, buffer.byteLength);
 
-    m._capnp.segments[i] = segment;
+    m._zap.segments[i] = segment;
   }
 }
 
@@ -312,20 +312,20 @@ function isAnyArena(o: unknown): o is AnyArena {
 }
 
 export function allocateSegment(byteLength: number, m: Message): Segment {
-  const res = Arena.allocate(byteLength, m._capnp.segments, m._capnp.arena);
+  const res = Arena.allocate(byteLength, m._zap.segments, m._zap.arena);
   let s: Segment;
 
-  if (res.id === m._capnp.segments.length) {
+  if (res.id === m._zap.segments.length) {
     // Note how we're only allowing new segments in if they're exactly the next one in the array. There is no logical
     // reason for segments to be created out of order.
 
     s = new Segment(res.id, m, res.buffer);
 
-    m._capnp.segments.push(s);
-  } else if (res.id < 0 || res.id > m._capnp.segments.length) {
+    m._zap.segments.push(s);
+  } else if (res.id < 0 || res.id > m._zap.segments.length) {
     throw new Error(format(MSG_SEGMENT_OUT_OF_BOUNDS, res.id, m));
   } else {
-    s = m._capnp.segments[res.id];
+    s = m._zap.segments[res.id];
     s.replaceBuffer(res.buffer);
   }
 
@@ -335,14 +335,14 @@ export function allocateSegment(byteLength: number, m: Message): Segment {
 export function dump(m: Message): string {
   let r = "";
 
-  if (m._capnp.segments.length === 0) {
+  if (m._zap.segments.length === 0) {
     return "================\nNo Segments\n================\n";
   }
 
-  for (let i = 0; i < m._capnp.segments.length; i++) {
+  for (let i = 0; i < m._zap.segments.length; i++) {
     r += `================\nSegment #${i}\n================\n`;
 
-    const { buffer, byteLength } = m._capnp.segments[i];
+    const { buffer, byteLength } = m._zap.segments[i];
     const b = new Uint8Array(buffer, 0, byteLength);
 
     r += dumpBuffer(b);
@@ -364,52 +364,48 @@ export function getRoot<T extends Struct>(
   // Make sure the underlying pointer is actually big enough to hold the data and pointers as specified in the schema.
   // If not a shallow copy of the struct contents needs to be made before returning.
   if (
-    ts.dataByteLength < RootStruct._capnp.size.dataByteLength ||
-    ts.pointerLength < RootStruct._capnp.size.pointerLength
+    ts.dataByteLength < RootStruct._zap.size.dataByteLength ||
+    ts.pointerLength < RootStruct._zap.size.pointerLength
   ) {
-    resize(RootStruct._capnp.size, root);
+    resize(RootStruct._zap.size, root);
   }
 
   return root;
 }
 
 export function getSegment(id: number, m: Message): Segment {
-  const segmentLength = m._capnp.segments.length;
+  const segmentLength = m._zap.segments.length;
 
   if (id === 0 && segmentLength === 0) {
     // Segment zero is special. If we have no segments in the arena we'll want to allocate a new one and leave room
     // for the root pointer.
 
-    const arenaSegments = Arena.getNumSegments(m._capnp.arena);
+    const arenaSegments = Arena.getNumSegments(m._zap.arena);
 
     if (arenaSegments === 0) {
       allocateSegment(DEFAULT_BUFFER_SIZE, m);
     } else {
       // Okay, the arena already has a buffer we can use. This is totally fine.
 
-      m._capnp.segments[0] = new Segment(
-        0,
-        m,
-        Arena.getBuffer(0, m._capnp.arena),
-      );
+      m._zap.segments[0] = new Segment(0, m, Arena.getBuffer(0, m._zap.arena));
     }
 
-    if (!m._capnp.segments[0].hasCapacity(8)) {
+    if (!m._zap.segments[0].hasCapacity(8)) {
       throw new Error(MSG_SEGMENT_TOO_SMALL);
     }
 
     // This will leave room for the root pointer.
 
-    m._capnp.segments[0].allocate(8);
+    m._zap.segments[0].allocate(8);
 
-    return m._capnp.segments[0];
+    return m._zap.segments[0];
   }
 
   if (id < 0 || id >= segmentLength) {
     throw new Error(format(MSG_SEGMENT_OUT_OF_BOUNDS, id, m));
   }
 
-  return m._capnp.segments[id];
+  return m._zap.segments[id];
 }
 
 export function initRoot<T extends Struct>(
@@ -418,7 +414,7 @@ export function initRoot<T extends Struct>(
 ): T {
   const root = new RootStruct(m.getSegment(0), 0);
 
-  initStruct(RootStruct._capnp.size, root);
+  initStruct(RootStruct._zap.size, root);
 
   return root;
 }
@@ -447,11 +443,11 @@ export function toArrayBuffer(m: Message): ArrayBuffer {
 
   // Make sure the first segment is allocated.
 
-  if (m._capnp.segments.length === 0) {
+  if (m._zap.segments.length === 0) {
     getSegment(0, m);
   }
 
-  const { segments } = m._capnp;
+  const { segments } = m._zap;
 
   // Add space for the stream framing.
 
@@ -478,14 +474,14 @@ export function toPackedArrayBuffer(m: Message): ArrayBuffer {
 
   // Make sure the first segment is allocated.
 
-  if (m._capnp.segments.length === 0) {
+  if (m._zap.segments.length === 0) {
     m.getSegment(0);
   }
 
   // NOTE: A copy operation can be avoided here if we capture the intermediate array and use that directly in the copy
   // loop below, rather than have `pack()` copy it to an ArrayBuffer just to have to copy it again later. If the
   // intermediate array can be avoided altogether that's even better!
-  const segments = m._capnp.segments.map((s) =>
+  const segments = m._zap.segments.map((s) =>
     pack(s.buffer, 0, padToWord(s.byteLength)),
   );
 
@@ -506,7 +502,7 @@ export function toPackedArrayBuffer(m: Message): ArrayBuffer {
 }
 
 export function getStreamFrame(m: Message): ArrayBuffer {
-  const { length } = m._capnp.segments;
+  const { length } = m._zap.segments;
 
   if (length === 0) {
     // Don't bother allocating the first segment, just return a single zero word for the frame header.
@@ -519,12 +515,12 @@ export function getStreamFrame(m: Message): ArrayBuffer {
 
   out.setUint32(0, length - 1, true);
 
-  for (const [i, s] of m._capnp.segments.entries()) {
+  for (const [i, s] of m._zap.segments.entries()) {
     out.setUint32(i * 4 + 4, s.byteLength / 8, true);
   }
 
   return out.buffer;
 }
 export function copy(m: Message): Message {
-  return new Message(Arena.copy(m._capnp.arena));
+  return new Message(Arena.copy(m._zap.arena));
 }

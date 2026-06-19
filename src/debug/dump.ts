@@ -1,18 +1,18 @@
-import type { Message, Struct } from "capnp-es";
+import type { Message, Struct } from "zap-es";
 import { spawn } from "node:child_process";
 import { existsSync } from "node:fs";
 
 /**
- * Converts a Cap'n Proto message to a human-readable string representation.
+ * Converts a ZAP message to a human-readable string representation.
  *
- * This function uses the Cap'n Proto command-line tool to convert a binary message
+ * This function uses the ZAP command-line tool to convert a binary message
  * to either text or JSON format. It is slow and should be used for debug only.
  *
- * @param message The Cap'n Proto message to convert
+ * @param message The ZAP message to convert
  * @param struct The struct type or display name of the message
- * @param capnpPath Path to the Cap'n Proto executable (defaults to "capnp")
+ * @param zapPath Path to the ZAP executable (defaults to "zap")
  * @param format Output format, either "text" or "json" (defaults to "text")
- * @param schemaPath Path to the Cap'n Proto schema file. Absolute or relative to cwd.
+ * @param schemaPath Path to the ZAP schema file. Absolute or relative to cwd.
  *
  * @returns A promise that resolves to the string representation of the message
  */
@@ -20,12 +20,12 @@ export function messageToString(
   message: Message,
   struct: typeof Struct | string,
   {
-    capnpPath,
+    zapPath,
     format,
     schemaPath,
   }: {
-    capnpPath?: string;
-    format?: "capnp" | "json";
+    zapPath?: string;
+    format?: "zap" | "json";
     schemaPath?: string;
   } = {},
 ): Promise<string> {
@@ -35,7 +35,7 @@ export function messageToString(
     }
 
     const anyStruct = struct as any;
-    const type = anyStruct?._capnp?.displayName ?? struct;
+    const type = anyStruct?._zap?.displayName ?? struct;
 
     if (typeof type !== "string") {
       // eslint-disable-next-line unicorn/prefer-type-error
@@ -46,7 +46,7 @@ export function messageToString(
 
     const args = ["convert", `binary:${outputFormat}`, schemaPath, type];
 
-    const process = spawn(capnpPath ?? "capnp", args);
+    const process = spawn(zapPath ?? "zap", args);
 
     let stdout = "";
     let stderr = "";

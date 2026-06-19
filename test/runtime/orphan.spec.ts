@@ -2,13 +2,13 @@
 
 import { test, assert as t } from "vitest";
 
-import { Message, ObjectSize, Orphan, Struct, utils } from "capnp-es";
+import { Message, ObjectSize, Orphan, Struct, utils } from "zap-es";
 import { Int32List } from "src/serialization";
 
 /** Just a silly struct that holds a single pointer to... itself? */
 
 class TestStruct extends Struct {
-  static readonly _capnp = {
+  static readonly _zap = {
     displayName: "TestStruct",
     id: "f38ff832f33d57da",
     size: new ObjectSize(8, 2),
@@ -65,18 +65,18 @@ test("new Orphan()", () => {
 
   const structOrphan = new Orphan(root);
 
-  if (structOrphan._capnp === undefined) {
+  if (structOrphan._zap === undefined) {
     throw new Error("orphan already adopted?");
   }
 
   t.equal(
-    structOrphan._capnp.size.dataByteLength,
-    TestStruct._capnp.size.dataByteLength,
+    structOrphan._zap.size.dataByteLength,
+    TestStruct._zap.size.dataByteLength,
     "should copy the data byte length",
   );
   t.equal(
-    structOrphan._capnp.size.pointerLength,
-    TestStruct._capnp.size.pointerLength,
+    structOrphan._zap.size.pointerLength,
+    TestStruct._zap.size.pointerLength,
     "should copy the pointer count",
   );
 
@@ -86,14 +86,14 @@ test("new Orphan()", () => {
 
   const listOrphan = new Orphan(list);
 
-  if (listOrphan._capnp === undefined) {
+  if (listOrphan._zap === undefined) {
     throw new Error("orphan already adopted?");
   }
 
-  t.equal(listOrphan._capnp.length, 2, "should copy the list length");
+  t.equal(listOrphan._zap.length, 2, "should copy the list length");
   t.equal(
-    listOrphan._capnp.elementSize,
-    Int32List._capnp.size,
+    listOrphan._zap.elementSize,
+    Int32List._zap.size,
     "should copy the list element size",
   );
 

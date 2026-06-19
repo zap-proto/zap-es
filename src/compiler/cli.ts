@@ -7,12 +7,12 @@ import { compileAll } from "./compiler";
 import { existsSync } from "node:fs";
 
 /**
- * Main entry point for the Cap'n Proto compiler CLI tools.
+ * Main entry point for the ZAP compiler CLI tools.
  * It handles two modes of operation:
- * 1. When invoked directly (via capnp-es), it parses command-line arguments and executes the Cap'n Proto compiler
+ * 1. When invoked directly (via zap-es), it parses command-line arguments and executes the ZAP compiler
  * 2. When invoked as a plugin, it reads schema data from stdin
  *
- * The function compiles the Cap'n Proto schema into JavaScript, TypeScript, or TypeScript declaration files
+ * The function compiles the ZAP schema into JavaScript, TypeScript, or TypeScript declaration files
  * based on the specified output format, and writes the generated files to the filesystem.
  *
  * @param outFormat - The default output format
@@ -27,7 +27,7 @@ export async function cliMain(outFormat: "js" | "ts" | "dts") {
       outFormats = parsedOptions.outFormats;
       outDir = parsedOptions.outDir;
       const { sources, options } = parsedOptions;
-      dataBuf = await execCapnpc(sources, options);
+      dataBuf = await execZapc(sources, options);
     }
     const { files } = await compileAll(dataBuf, {
       ts: outFormats.includes("ts"),
@@ -35,7 +35,7 @@ export async function cliMain(outFormat: "js" | "ts" | "dts") {
       dts: outFormats.includes("dts"),
     });
     (await writeFiles(files, outDir)).map((file) =>
-      console.log(`[capnp-es] ${file}`),
+      console.log(`[zap-es] ${file}`),
     );
   } catch (error) {
     console.error(error);
@@ -44,11 +44,11 @@ export async function cliMain(outFormat: "js" | "ts" | "dts") {
 }
 
 /**
- * Parses command-line arguments for the Cap'n Proto compiler CLI.
+ * Parses command-line arguments for the ZAP compiler CLI.
  *
  * @returns An object containing:
  *   - sources: Array of source file paths to compile
- *   - options: Array of command-line options to pass to capnpc
+ *   - options: Array of command-line options to pass to zapc
  *   - outFormats: Array of output format strings ("js", "ts", "dts")
  *   - outDir: Optional output directory for generated files
  */
@@ -77,7 +77,7 @@ function parseOptions() {
       if (s[1]) {
         outDir = s[1];
       }
-    } else if (capnpcOptions.some((opt) => arg.startsWith(opt))) {
+    } else if (zapcOptions.some((opt) => arg.startsWith(opt))) {
       options.push(arg);
     }
   }
@@ -86,23 +86,20 @@ function parseOptions() {
 }
 
 /**
- * Executes the Cap'n Proto compiler (capnpc) with the specified sources and options.
+ * Executes the ZAP compiler (zapc) with the specified sources and options.
  *
- * This function runs the capnpc command-line tool to compile Cap'n Proto schema files.
+ * This function runs the zapc command-line tool to compile ZAP schema files.
  *
  * @param sources - Array of source file paths to compile
- * @param options - Array of command-line options to pass to capnpc
+ * @param options - Array of command-line options to pass to zapc
  * @param outDir - Optional output directory for generated files
  *
- * @returns A Buffer containing the stdout of the capnpc command
+ * @returns A Buffer containing the stdout of the zapc command
  */
-async function execCapnpc(
-  sources: string[],
-  options: string[],
-): Promise<Buffer> {
+async function execZapc(sources: string[], options: string[]): Promise<Buffer> {
   // Uses -o- to output to stdout
-  const cmd = `capnpc -o- ${options.join(" ")} ${sources.join(" ")}`;
-  console.log(`[capnp-es] ${cmd}`);
+  const cmd = `zapc -o- ${options.join(" ")} ${sources.join(" ")}`;
+  console.log(`[zap-es] ${cmd}`);
   return new Promise<Buffer>((resolve) => {
     exec(cmd, { encoding: "buffer" }, (error, stdout, stderr) => {
       if (stderr.length > 0) {
@@ -183,7 +180,7 @@ async function readStdin(): Promise<Buffer> {
   return reqBuffer;
 }
 
-const capnpcOptions = [
+const zapcOptions = [
   "-I",
   "--import-path",
   "-i",
@@ -194,9 +191,9 @@ const capnpcOptions = [
 ];
 
 const usage = `
-Usage: capnp-es [<option>...] <source>...
+Usage: zap-es [<option>...] <source>...
 
-Compiles Cap'n Proto schema files and generates corresponding source code for javascript and typescript.
+Compiles ZAP schema files and generates corresponding source code for javascript and typescript.
 
 Options:
     -o<lang>[:<dir>], --output=<lang>[:<dir>]
@@ -204,7 +201,7 @@ Options:
     -I<dir>, --import-path=<dir>
         Add <dir> to the list of directories searched for non-relative imports.
     -i, --generate-id
-        Generate a new 64-bit unique ID for use in a Cap'n Proto schema.
+        Generate a new 64-bit unique ID for use in a ZAP schema.
     --no-standard-import
         Do not add any default import paths; use only those specified by -I.
     --src-prefix=<prefix>

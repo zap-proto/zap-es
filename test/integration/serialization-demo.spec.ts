@@ -2,7 +2,7 @@
 
 import { test, assert as t } from "vitest";
 
-import * as capnp from "capnp-es";
+import * as zap from "zap-es";
 import { compareBuffers, readFileBuffer } from "test/utils";
 import {
   AddressBook,
@@ -16,7 +16,7 @@ const SERIALIZATION_DEMO = readFileBuffer(
 );
 
 test("write address book", () => {
-  const message = new capnp.Message();
+  const message = new zap.Message();
   const addressBook = message.initRoot(AddressBook);
 
   // t.type(addressBook, AddressBook);
@@ -80,7 +80,7 @@ test("write address book", () => {
 });
 
 test("read address book", () => {
-  const message = new capnp.Message(SERIALIZATION_DEMO, false);
+  const message = new zap.Message(SERIALIZATION_DEMO, false);
 
   const addressBook = message.getRoot(AddressBook);
 
@@ -129,7 +129,7 @@ test("read address book", () => {
 });
 
 test("copy pointers from other message", () => {
-  const message1 = new capnp.Message();
+  const message1 = new zap.Message();
   const addressBook1 = message1.initRoot(AddressBook);
   const people1 = addressBook1._initPeople(2);
   const alice1 = people1.get(1);
@@ -138,7 +138,7 @@ test("copy pointers from other message", () => {
   alice1.email = "alice@example.com";
   alice1.id = 456;
 
-  const message2 = new capnp.Message();
+  const message2 = new zap.Message();
   const addressBook2 = message2.initRoot(AddressBook);
 
   addressBook2.people = people1;
@@ -153,7 +153,7 @@ test("copy pointers from other message", () => {
 });
 
 test("adoption", () => {
-  const m = new capnp.Message();
+  const m = new zap.Message();
   const s = m.getSegment(0);
   const addressBook = m.initRoot(AddressBook);
   const people1 = addressBook._initPeople(1);
@@ -190,7 +190,7 @@ test("adoption", () => {
 });
 
 test("overwrite", () => {
-  const m = new capnp.Message();
+  const m = new zap.Message();
   const s = m.getSegment(0);
   const addressBook = m.initRoot(AddressBook);
   const alice = addressBook._initPeople(1).get(0);

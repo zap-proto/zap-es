@@ -30,7 +30,7 @@
 
 ### 🩹 Fixes
 
-- Do not pass the output directory to capnpc ([#61](https://github.com/unjs/capnp-es/pull/61))
+- Do not pass the output directory to zapc ([#61](https://github.com/unjs/capnp-es/pull/61))
 
 ### 💅 Refactors
 
@@ -51,7 +51,7 @@
 ### 🚀 Enhancements
 
 - Add `messageToString` to dump messages ([#39](https://github.com/unjs/capnp-es/pull/39))
-- Expose capnpc-ts, capnpc-dts, capnpc-js ([#41](https://github.com/unjs/capnp-es/pull/41))
+- Expose zapc-ts, zapc-dts, zapc-js ([#41](https://github.com/unjs/capnp-es/pull/41))
 
 ### 🩹 Fixes
 
@@ -86,7 +86,7 @@
 ### 🚀 Enhancements
 
 - Add `messageToString` to dump messages ([#39](https://github.com/unjs/capnp-es/pull/39))
-- Expose capnpc-ts, capnpc-dts, capnpc-js ([#41](https://github.com/unjs/capnp-es/pull/41))
+- Expose zapc-ts, zapc-dts, zapc-js ([#41](https://github.com/unjs/capnp-es/pull/41))
 
 ### 🩹 Fixes
 
@@ -245,7 +245,7 @@
 ### 🚀 Enhancements
 
 - **compiler:** Enums as typed plain objects ([d316d8b](https://github.com/unjs/capnp-es/commit/d316d8b))
-- **cli:** Allow directly passing path to capnp files ([7eb8f86](https://github.com/unjs/capnp-es/commit/7eb8f86))
+- **cli:** Allow directly passing path to zap files ([7eb8f86](https://github.com/unjs/capnp-es/commit/7eb8f86))
 - Use getter/setter for struct ([88504dd](https://github.com/unjs/capnp-es/commit/88504dd))
 - Compile schemas from source ([1d7bf84](https://github.com/unjs/capnp-es/commit/1d7bf84))
 - Experimental RPC level 1 ([#3](https://github.com/unjs/capnp-es/pull/3))
@@ -266,7 +266,7 @@
 
 - Shorter code gen ([1feaf4a](https://github.com/unjs/capnp-es/commit/1feaf4a))
 - Better src/pointers structure ([39d7049](https://github.com/unjs/capnp-es/commit/39d7049))
-- Rename std to capnp ([7abfafc](https://github.com/unjs/capnp-es/commit/7abfafc))
+- Rename std to zap ([7abfafc](https://github.com/unjs/capnp-es/commit/7abfafc))
 - Decouple struct and pointer utils from class ([b19e4e1](https://github.com/unjs/capnp-es/commit/b19e4e1))
 
 ### 📦 Build
@@ -340,9 +340,9 @@
 
 ### 🤖 CI
 
-- Install capnpc ([86d1089](https://github.com/unjs/capnp-es/commit/86d1089))
-- Build capnproto from source ([504cdd5](https://github.com/unjs/capnp-es/commit/504cdd5))
-- Uppdate capnp install ([cbbff7e](https://github.com/unjs/capnp-es/commit/cbbff7e))
+- Install zapc ([86d1089](https://github.com/unjs/capnp-es/commit/86d1089))
+- Build zap from source ([504cdd5](https://github.com/unjs/capnp-es/commit/504cdd5))
+- Uppdate zap install ([cbbff7e](https://github.com/unjs/capnp-es/commit/cbbff7e))
 
 ### ❤️ Contributors
 

@@ -14,7 +14,7 @@ export interface _PointerCtor {
 }
 
 export interface PointerCtor<T extends Pointer> {
-  readonly _capnp: _PointerCtor;
+  readonly _zap: _PointerCtor;
 
   new (segment: Segment, byteOffset: number, depthLimit?: number): T;
 }
@@ -38,15 +38,15 @@ export interface _Pointer {
 }
 
 /**
- * A pointer referencing a single byte location in a segment. This is typically used for Cap'n Proto pointers, but is
+ * A pointer referencing a single byte location in a segment. This is typically used for ZAP pointers, but is
  * also sometimes used to reference an offset to a pointer's content or tag words.
  */
 export class Pointer<T extends _Pointer = _Pointer> {
-  static readonly _capnp: _PointerCtor = {
+  static readonly _zap: _PointerCtor = {
     displayName: "Pointer" as string,
   };
 
-  readonly _capnp: T;
+  readonly _zap: T;
 
   /** Offset, in bytes, from the start of the segment to the beginning of this pointer. */
   byteOffset: number;
@@ -58,7 +58,7 @@ export class Pointer<T extends _Pointer = _Pointer> {
   segment: Segment;
 
   constructor(segment: Segment, byteOffset: number, depthLimit = MAX_DEPTH) {
-    this._capnp = { compositeList: false, depthLimit } as T;
+    this._zap = { compositeList: false, depthLimit } as T;
     this.segment = segment;
     this.byteOffset = byteOffset;
 

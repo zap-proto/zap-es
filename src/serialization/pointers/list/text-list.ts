@@ -6,7 +6,7 @@ import { Text } from "../text";
 import { getContent } from "../pointer.utils";
 
 export class TextList extends List<string> {
-  static readonly _capnp: _ListCtor = {
+  static readonly _zap: _ListCtor = {
     displayName: "List<Text>" as string,
     size: ListElementSize.POINTER,
   };

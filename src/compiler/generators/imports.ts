@@ -2,28 +2,28 @@ import type { CodeGeneratorFileContext } from ".";
 import { TS_FILE_ID } from "../constants";
 import { getFullClassName, hasNode, lookupNode } from "../node-util";
 import * as util from "../util";
-import type * as schema from "../../capnp/schema";
+import type * as schema from "../../zap/schema";
 
 /**
- * Generates the import statement for the capnp-es runtime library.
+ * Generates the import statement for the zap-es runtime library.
  *
  * This function checks for a custom import path annotation in the schema file.
- * If found, it uses that path instead of the default 'capnp-es' import.
+ * If found, it uses that path instead of the default 'zap-es' import.
  *
  * The import path can be customized using the ts.importPath annotation:
  *
- * ```capnp
- * using Ts = import "/capnp/ts.capnp";
- * $Ts.importPath("../custom/path/to/capnp-es");
+ * ```zap
+ * using Ts = import "/zap/ts.zap";
+ * $Ts.importPath("../custom/path/to/zap-es");
  * ```
  *
  * @param ctx - The code generator context containing file and annotation information
  */
-export function generateCapnpImport(ctx: CodeGeneratorFileContext): void {
-  // Look for the special importPath annotation on the file to see if we need a different import path for capnp-es.
+export function generateZapImport(ctx: CodeGeneratorFileContext): void {
+  // Look for the special importPath annotation on the file to see if we need a different import path for zap-es.
   const fileNode = lookupNode(ctx, ctx.file);
   const tsFileId = util.hexToBigInt(TS_FILE_ID);
-  // This may be undefined if ts.capnp is not imported; fine, we'll just use the default.
+  // This may be undefined if ts.zap is not imported; fine, we'll just use the default.
   const tsAnnotationFile = ctx.nodes.find((n) => n.id === tsFileId);
   // We might not find the importPath annotation; that's definitely a bug but let's move on.
   const tsImportPathAnnotation = tsAnnotationFile?.nestedNodes.find(
@@ -34,13 +34,13 @@ export function generateCapnpImport(ctx: CodeGeneratorFileContext): void {
     tsImportPathAnnotation &&
     fileNode.annotations.find((a) => a.id === tsImportPathAnnotation.id);
   const importPath =
-    importAnnotation === undefined ? "capnp-es" : importAnnotation.value.text;
+    importAnnotation === undefined ? "zap-es" : importAnnotation.value.text;
 
   ctx.codeParts.push(`import * as $ from '${importPath}';`);
 }
 
 /**
- * Generates TypeScript import statements for nested types defined in Cap'n Proto schema files.
+ * Generates TypeScript import statements for nested types defined in ZAP schema files.
  *
  * @param ctx - The file context containing import information and statements
  * @param ctx.imports - List of schema files to import from
@@ -51,10 +51,10 @@ export function generateNestedImports(ctx: CodeGeneratorFileContext): void {
     const { name } = imp;
     let importPath: string;
 
-    if (name.startsWith("/capnp/")) {
-      importPath = `capnp-es/capnp/${name.slice(7).replace(/\.(zap|capnp)$/, "")}`;
+    if (name.startsWith("/zap/")) {
+      importPath = `zap-es/zap/${name.slice("/zap/".length).replace(/\.zap$/, "")}`;
     } else {
-      importPath = name.replace(/\.(zap|capnp)$/, ".js");
+      importPath = name.replace(/\.zap$/, ".js");
       if (importPath[0] !== ".") {
         importPath = `./${importPath}`;
       }

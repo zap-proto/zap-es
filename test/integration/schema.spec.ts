@@ -1,8 +1,8 @@
 // Based on https://github.com/jdiaz5513/capnp-ts (MIT - Julián Díaz)
 
 import { test, assert as t } from "vitest";
-import * as capnp from "capnp-es";
-import { CodeGeneratorRequest } from "src/capnp/schema";
+import * as zap from "zap-es";
+import { CodeGeneratorRequest } from "src/zap/schema";
 import { readFileBuffer } from "test/utils";
 
 const SCHEMA_MESSAGE = readFileBuffer("test/fixtures/data/schema.bin");
@@ -10,16 +10,16 @@ const SCHEMA_MESSAGE = readFileBuffer("test/fixtures/data/schema.bin");
 const SCHEMA_FILE_ID = 0xa9_3f_c5_09_62_4c_72_d9n;
 
 test("schema roundtrip", () => {
-  const message = new capnp.Message(SCHEMA_MESSAGE, false);
+  const message = new zap.Message(SCHEMA_MESSAGE, false);
   const req = message.getRoot(CodeGeneratorRequest);
 
   // t.type(req, CodeGeneratorRequest);
 
-  const capnpVersion = req.capnpVersion;
+  const zapVersion = req.zapVersion;
 
-  t.equal(capnpVersion.major, 0);
-  t.equal(capnpVersion.minor, 6);
-  t.equal(capnpVersion.micro, 0);
+  t.equal(zapVersion.major, 0);
+  t.equal(zapVersion.minor, 6);
+  t.equal(zapVersion.micro, 0);
 
   const requestedFiles = req.requestedFiles;
 
@@ -28,6 +28,9 @@ test("schema roundtrip", () => {
   const requestedFile = requestedFiles.get(0);
   const filename = requestedFile.filename;
 
+  // This filename is embedded in the precompiled golden fixture `schema.bin`
+  // (generated upstream against capnp-ts); the binary is an immutable test
+  // vector, so the expected value retains the original embedded path.
   t.equal(filename, "packages/capnp-ts/src/std/schema.capnp");
 
   const requestedFileId = requestedFile.id;

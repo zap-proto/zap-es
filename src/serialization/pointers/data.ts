@@ -20,7 +20,7 @@ export class Data extends List<number> {
     return new this(
       pointer.segment,
       pointer.byteOffset,
-      pointer._capnp.depthLimit,
+      pointer._zap.depthLimit,
     );
   }
 

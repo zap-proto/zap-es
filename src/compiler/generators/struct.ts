@@ -1,4 +1,4 @@
-import * as schema from "../../capnp/schema";
+import * as schema from "../../zap/schema";
 import {
   getDisplayNamePrefix,
   getFullClassName,
@@ -20,11 +20,11 @@ import {
   getUint16,
   getPointer,
 } from "../../serialization/pointers/struct.utils";
-import * as capnp from "../..";
+import * as zap from "../..";
 import { format, pad } from "../../util";
 
 /**
- * Generates TypeScript class definition for a Cap'n Proto struct.
+ * Generates TypeScript class definition for a ZAP struct.
  * Creates class members, properties, methods and nested type definitions.
  *
  * @param ctx - The file context containing schema information and output statements
@@ -102,7 +102,7 @@ export function generateStructNode(
 
   members.push(
     `
-      static readonly _capnp = {
+      static readonly _zap = {
         displayName: "${displayNamePrefix}",
         id: "${nodeIdHex}",
         size: new $.ObjectSize(${dataByteLength}, ${pointerCount}),
@@ -151,7 +151,7 @@ export function generateStructNode(
 } /**
  * Generates TypeScript code for struct field methods.
  *
- * This function creates accessor methods and properties for a Cap'n Proto struct field:
+ * This function creates accessor methods and properties for a ZAP struct field:
  * - Getters and setters for the field value
  * - Adoption and disowning methods for pointer fields
  * - Initialization methods for lists and structs
@@ -199,7 +199,7 @@ export function generateStructFieldMethods(
   const fullClassName = getFullClassName(node);
   const hadExplicitDefault = field._isSlot && field.slot.hadExplicitDefault;
   const maybeDefaultArg = hadExplicitDefault
-    ? `, ${fullClassName}._capnp.default${capitalizedName}`
+    ? `, ${fullClassName}._zap.default${capitalizedName}`
     : "";
   const union = discriminantValue !== schema.Field.NO_DISCRIMINANT;
   const offset = field._isSlot ? field.slot.offset : 0;
@@ -394,7 +394,7 @@ export function generateStructFieldMethods(
   }
 }
 /**
- * Generates a string representation of a default value expression for a Cap'n Proto field.
+ * Generates a string representation of a default value expression for a ZAP field.
  *
  * This function handles different field types and their default value representations:
  * - Pointers (ANY_POINTER, DATA, LIST, STRUCT, INTERFACE)
@@ -402,7 +402,7 @@ export function generateStructFieldMethods(
  * - Boolean fields (with bit offset)
  * - Numeric types (ENUM, FLOAT32/64, INT8/16/32/64, UINT8/16/32/64)
  *
- * @param field - The Cap'n Proto field definition containing type and default value information
+ * @param field - The ZAP field definition containing type and default value information
  * @returns A string containing the default value expression
  * @throws {Error} If the field type is not supported for default values
  */
@@ -485,7 +485,7 @@ export function createUnionConstProperty(
 }
 
 export function createValue(value: schema.Value): string {
-  let p: capnp.Pointer;
+  let p: zap.Pointer;
 
   switch (value.which()) {
     case schema.Value.BOOL: {
@@ -574,7 +574,7 @@ export function createValue(value: schema.Value): string {
     }
   }
 
-  const message = new capnp.Message();
+  const message = new zap.Message();
   message.setRoot(p);
 
   const buf = new Uint8Array(message.toPackedArrayBuffer());

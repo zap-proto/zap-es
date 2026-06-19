@@ -8,7 +8,7 @@ import { ErrorClient } from "./error-client";
 import { transformPtr } from "./transform-ptr";
 import { getInterfaceClientOrNull } from "../serialization/pointers/struct.utils";
 
-// A Client represents an Cap'n Proto interface type.
+// A Client represents an ZAP interface type.
 export interface Client {
   // call starts executing a method and returns an answer that will hold
   // the resulting struct.  The call's parameters must be placed before
@@ -29,7 +29,7 @@ export interface Client {
 
 export function isSameClient(c: Client, d: Client): boolean {
   const norm = (c: Client): Client => {
-    // TODO: normalize, see https://sourcegraph.com/github.com/capnproto/go-capnproto2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/introspect.go#L209
+    // TODO: normalize, see https://sourcegraph.com/github.com/zap/go-zap2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/introspect.go#L209
     return c;
   };
   return norm(c) === norm(d);

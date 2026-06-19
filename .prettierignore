@@ -7,4 +7,4 @@ playground/*.ts
 playground/*.d.ts
 playground/*.js
 
-src/capnp/*.ts
+src/zap/*.ts

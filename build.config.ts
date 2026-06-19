@@ -5,16 +5,16 @@ export default defineBuildConfig({
   entries: [
     "./src/index.ts",
     "./src/compiler/index.ts",
-    "./src/compiler/capnpc-js.ts",
-    "./src/compiler/capnpc-dts.ts",
-    "./src/compiler/capnpc-ts.ts",
+    "./src/compiler/zapc-js.ts",
+    "./src/compiler/zapc-dts.ts",
+    "./src/compiler/zapc-ts.ts",
     "./src/debug/index.ts",
     ...["cpp", "persistent", "rpc-twoparty", "rpc", "schema", "ts"].map(
-      (n) => `./src/capnp/${n}.ts`,
+      (n) => `./src/zap/${n}.ts`,
     ),
   ],
   alias: {
-    "capnp-es": fileURLToPath(new URL("src/index.ts", import.meta.url)),
+    "zap-es": fileURLToPath(new URL("src/index.ts", import.meta.url)),
   },
   hooks: {
     "rollup:options"(_ctx, rollupOptions) {

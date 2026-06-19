@@ -1,11 +1,11 @@
-import * as schema from "../../capnp/schema";
+import * as schema from "../../zap/schema";
 import { compareCodeOrder, lookupNodeSourceInfo } from "../node-util";
 import * as util from "../util";
 import type { CodeGeneratorFileContext } from ".";
 import { extractJSDocs } from "./helpers";
 
 /**
- * Generates TypeScript enum code from Cap'n Proto enum definitions.
+ * Generates TypeScript enum code from ZAP enum definitions.
  *
  * @param ctx - The file context containing schema information and output statements
  * @param className - The name to use for the generated enum type and const object

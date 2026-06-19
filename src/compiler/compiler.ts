@@ -1,7 +1,7 @@
 // Based on https://github.com/jdiaz5513/capnp-ts (MIT - Julián Díaz)
 
 import ts from "typescript";
-import * as s from "../capnp/schema.ts";
+import * as s from "../zap/schema.ts";
 import { Message } from "../serialization/message.ts";
 import * as E from "./errors";
 import {
@@ -15,15 +15,15 @@ import { generateConcreteListInitializer } from "./generators/list.ts";
 import { generateNode } from "./generators/index.ts";
 import {
   generateNestedImports,
-  generateCapnpImport,
+  generateZapImport,
 } from "./generators/imports.ts";
 
 /**
- * Compiles Cap'n Proto schema files into TypeScript/JavaScript code.
+ * Compiles ZAP schema files into TypeScript/JavaScript code.
  *
- * @see `src/capnp/_capnp/schema.capnp`
+ * @see `src/zap/_zap/schema.zap`
  *
- * @param codeGenRequest - Buffer containing the Cap'n Proto CodeGeneratorRequest message
+ * @param codeGenRequest - Buffer containing the ZAP CodeGeneratorRequest message
  * @param opts - Compilation options
  * @param opts.ts - Whether to generate TypeScript (.ts) files
  * @param opts.js - Whether to generate JavaScript (.js) files
@@ -73,7 +73,7 @@ export async function compileAll(
 }
 
 /**
- * Compiles a single Cap'n Proto schema file into TypeScript code.
+ * Compiles a single ZAP schema file into TypeScript code.
  * Generates imports, file ID, and type definitions for all nodes in the schema.
  *
  * @param ctx - File context containing schema information and compilation state
@@ -85,7 +85,7 @@ export async function compileAll(
  * @returns Generated TypeScript source code as a string, including source header comment
  */
 export function compileFile(ctx: CodeGeneratorFileContext) {
-  generateCapnpImport(ctx);
+  generateZapImport(ctx);
   generateNestedImports(ctx);
   generateFileId(ctx);
 

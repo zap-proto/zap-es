@@ -5,7 +5,7 @@ import { _ListCtor, List } from "./list";
 import { getContent } from "../pointer.utils";
 
 export class Int16List extends List<number> {
-  static readonly _capnp: _ListCtor = {
+  static readonly _zap: _ListCtor = {
     displayName: "List<Int16>" as string,
     size: ListElementSize.BYTE_2,
   };

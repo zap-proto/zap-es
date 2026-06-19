@@ -1,4 +1,4 @@
-import * as schema from "../../capnp/schema";
+import * as schema from "../../zap/schema";
 
 export function createBigInt(value: bigint): string {
   let v = value.toString(16);
@@ -11,7 +11,7 @@ export function createBigInt(value: bigint): string {
 }
 
 /**
- * Extracts JSDoc comments from a Cap'n Proto source info as a formatted string.
+ * Extracts JSDoc comments from a ZAP source info as a formatted string.
  *
  * @param sourceInfo - The source info containing documentation comments
  * @returns Formatted JSDoc string or undefined if no documentation exists

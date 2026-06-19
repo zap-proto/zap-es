@@ -9,9 +9,9 @@
     "noEmit": true,
     "allowImportingTsExtensions": true,
     "paths": {
-      "capnp-es": ["./src/index.ts"],
-      "capnp-es/compiler": ["./src/compiler/index.ts"],
-      "capnp-es/capnp/*": ["./src/capnp/*.ts"],
+      "zap-es": ["./src/index.ts"],
+      "zap-es/compiler": ["./src/compiler/index.ts"],
+      "zap-es/zap/*": ["./src/zap/*.ts"],
       "src/*": ["./src/*"],
       "test/*": ["./test/*"]
     }

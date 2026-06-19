@@ -1,7 +1,7 @@
 import { readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { group, bench, run, summary } from "mitata";
-import * as capnpES from "capnp-es";
+import * as zapES from "zap-es";
 
 // JSON
 const decoder = new TextDecoder();
@@ -21,40 +21,17 @@ const jsonBuffBench = {
   traverse: () => traverseData(JSON.parse(decoder.decode(jsonData))),
 };
 
-// capnp-es
-const { AddressBook: capnpESStruct } = await import("./data/capnp/schema.ts");
-const capnpData = new Uint8Array(
-  await readFile(new URL("data/capnp/data.bin", import.meta.url)),
+// zap-es
+const { AddressBook: zapESStruct } = await import("./data/zap/schema.ts");
+const zapData = new Uint8Array(
+  await readFile(new URL("data/zap/data.bin", import.meta.url)),
 );
-const capnpESBench = {
-  parse: () =>
-    new capnpES.Message(capnpData, false, true).getRoot(capnpESStruct),
+const zapESBench = {
+  parse: () => new zapES.Message(zapData, false, true).getRoot(zapESStruct),
   length: () =>
-    new capnpES.Message(capnpData, false, true).getRoot(capnpESStruct).people
-      .length,
+    new zapES.Message(zapData, false, true).getRoot(zapESStruct).people.length,
   traverse: () =>
-    traverseData(
-      new capnpES.Message(capnpData, false, true).getRoot(capnpESStruct),
-    ),
-};
-
-// capnp-ts
-const capnpTS = await import("capnp-ts" as any);
-const { AddressBook: capnpTSStruct } = await import(
-  "./data/capnp/schema-legacy.cjs" as any
-);
-const capnpTSBench = {
-  parse: () =>
-    new capnpTS.Message(capnpData, false, true).getRoot(capnpTSStruct),
-  length: () =>
-    (new capnpTS.Message(capnpData, false, true).getRoot(capnpTSStruct) as any)
-      .getPeople()
-      .getLength(),
-  traverse: () =>
-    traverseData(
-      new capnpTS.Message(capnpData, false, true).getRoot(capnpTSStruct),
-      true,
-    ),
+    traverseData(new zapES.Message(zapData, false, true).getRoot(zapESStruct)),
 };
 
 // protobuf
@@ -72,23 +49,12 @@ const protobufBench = {
 };
 
 // This util traverses all fields of the object
-function traverseData(obj: any, capnpTSCompat = false) {
+function traverseData(obj: any) {
   const res: string[] = [];
-  if (capnpTSCompat) {
-    // eslint-disable-next-line unicorn/no-array-for-each
-    obj.getPeople().forEach((person: any) => {
-      res.push(person.getId(), person.getName(), person.getEmail());
-      // eslint-disable-next-line unicorn/no-array-for-each
-      person.getPhones().forEach((phone: any) => {
-        res.push(phone.getNumber());
-      });
-    });
-  } else {
-    for (const person of obj.people) {
-      res.push(person.id, person.name, person.email);
-      for (const phone of person.phones) {
-        res.push(phone.number);
-      }
+  for (const person of obj.people) {
+    res.push(person.id, person.name, person.email);
+    for (const phone of person.phones) {
+      res.push(phone.number);
     }
   }
   return res.join(":");
@@ -96,8 +62,7 @@ function traverseData(obj: any, capnpTSCompat = false) {
 
 // All benchmarks
 const benchmarks = {
-  "capnp-es": capnpESBench,
-  "capnp-ts": capnpTSBench,
+  "zap-es": zapESBench,
   "JSON.parse(<string>)": jsonStrBench,
   "JSON.parse(<buffer>)": jsonBuffBench,
   protobuf: protobufBench,

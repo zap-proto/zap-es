@@ -5,7 +5,7 @@ import { PipelineOp } from "./pipeline-op";
 import { Call, copyCall } from "./call";
 import { Conn } from "./conn";
 import { Deferred } from "./deferred";
-import { MessageTarget } from "../capnp/rpc";
+import { MessageTarget } from "../zap/rpc";
 import { Fulfiller } from "./fulfiller/fulfiller";
 import { newReturnMessage, setReturnException } from "./capability";
 import { Pointer } from "../serialization/pointers/pointer";
@@ -79,7 +79,7 @@ export class AnswerEntry<R extends Struct> {
       firstErr = queuesErr;
     }
 
-    const objcap = obj.segment.message._capnp;
+    const objcap = obj.segment.message._zap;
     if (!objcap.capTable) {
       objcap.capTable = [];
     }

@@ -159,7 +159,7 @@ export function getListElementByteLength(elementSize: ListElementSize): number {
  */
 
 export function add(offset: number, p: Pointer): Pointer {
-  return new Pointer(p.segment, p.byteOffset + offset, p._capnp.depthLimit);
+  return new Pointer(p.segment, p.byteOffset + offset, p._zap.depthLimit);
 }
 
 /**
@@ -255,11 +255,7 @@ export function erase(p: Pointer): void {
       if (elementSize === ListElementSize.POINTER) {
         for (let i = 0; i < length; i++) {
           erase(
-            new Pointer(
-              c.segment,
-              c.byteOffset + i * 8,
-              p._capnp.depthLimit - 1,
-            ),
+            new Pointer(c.segment, c.byteOffset + i * 8, p._zap.depthLimit - 1),
           );
         }
 
@@ -283,7 +279,7 @@ export function erase(p: Pointer): void {
               new Pointer(
                 c.segment,
                 c.byteOffset + i * compositeByteLength + j * 8,
-                p._capnp.depthLimit - 1,
+                p._zap.depthLimit - 1,
               ),
             );
           }
@@ -352,7 +348,7 @@ export function followFar(p: Pointer): Pointer {
   return new Pointer(
     targetSegment,
     targetWordOffset * 8,
-    p._capnp.depthLimit - 1,
+    p._zap.depthLimit - 1,
   );
 }
 
@@ -421,7 +417,7 @@ export function getContent(
     c.byteOffset += 8;
   }
 
-  if (!ignoreCompositeIndex && p._capnp.compositeIndex !== undefined) {
+  if (!ignoreCompositeIndex && p._zap.compositeIndex !== undefined) {
     // Seek backwards by one word so we can read the struct size off the tag word.
 
     c.byteOffset -= 8;
@@ -430,8 +426,7 @@ export function getContent(
 
     c.byteOffset +=
       8 +
-      p._capnp.compositeIndex *
-        getByteLength(padObjectToWord(getStructSize(c)));
+      p._zap.compositeIndex * getByteLength(padObjectToWord(getStructSize(c)));
   }
 
   return c;
@@ -870,7 +865,7 @@ export function copyFromInterface(src: Pointer, dst: Pointer): void {
     return;
   }
 
-  const srcCapTable = src.segment.message._capnp.capTable;
+  const srcCapTable = src.segment.message._zap.capTable;
   if (!srcCapTable) {
     // trace("copyFromInterface: src pointer's message has no cap table");
     return;
@@ -888,7 +883,7 @@ export function copyFromInterface(src: Pointer, dst: Pointer): void {
 }
 
 export function copyFromList(src: Pointer, dst: Pointer): void {
-  if (dst._capnp.depthLimit <= 0) {
+  if (dst._zap.depthLimit <= 0) {
     throw new Error(PTR_DEPTH_LIMIT_EXCEEDED);
   }
 
@@ -907,12 +902,12 @@ export function copyFromList(src: Pointer, dst: Pointer): void {
       const srcPtr = new Pointer(
         srcContent.segment,
         srcContent.byteOffset + (i << 3),
-        src._capnp.depthLimit - 1,
+        src._zap.depthLimit - 1,
       );
       const dstPtr = new Pointer(
         dstContent.segment,
         dstContent.byteOffset + (i << 3),
-        dst._capnp.depthLimit - 1,
+        dst._zap.depthLimit - 1,
       );
 
       copyFrom(srcPtr, dstPtr);
@@ -957,12 +952,12 @@ export function copyFromList(src: Pointer, dst: Pointer): void {
         const srcPtr = new Pointer(
           srcContent.segment,
           srcContent.byteOffset + offset,
-          src._capnp.depthLimit - 1,
+          src._zap.depthLimit - 1,
         );
         const dstPtr = new Pointer(
           dstContent.segment,
           dstContent.byteOffset + offset + 8,
-          dst._capnp.depthLimit - 1,
+          dst._zap.depthLimit - 1,
         );
 
         copyFrom(srcPtr, dstPtr);
@@ -999,7 +994,7 @@ export function copyFromList(src: Pointer, dst: Pointer): void {
 }
 
 export function copyFromStruct(src: Pointer, dst: Pointer): void {
-  if (dst._capnp.depthLimit <= 0) {
+  if (dst._zap.depthLimit <= 0) {
     throw new Error(PTR_DEPTH_LIMIT_EXCEEDED);
   }
 
@@ -1025,12 +1020,12 @@ export function copyFromStruct(src: Pointer, dst: Pointer): void {
     const srcPtr = new Pointer(
       srcContent.segment,
       srcContent.byteOffset + offset,
-      src._capnp.depthLimit - 1,
+      src._zap.depthLimit - 1,
     );
     const dstPtr = new Pointer(
       dstContent.segment,
       dstContent.byteOffset + offset,
-      dst._capnp.depthLimit - 1,
+      dst._zap.depthLimit - 1,
     );
 
     copyFrom(srcPtr, dstPtr);
@@ -1038,7 +1033,7 @@ export function copyFromStruct(src: Pointer, dst: Pointer): void {
 
   // Don't touch dst if it's already initialized as a composite list pointer. With composite struct pointers there's
   // no pointer to copy here and we've already copied the contents.
-  if (dst._capnp.compositeList) {
+  if (dst._zap.compositeList) {
     return;
   }
 
@@ -1058,9 +1053,9 @@ export function copyFromStruct(src: Pointer, dst: Pointer): void {
  */
 
 export function trackPointerAllocation(message: Message, p: Pointer): void {
-  message._capnp.traversalLimit -= 8;
+  message._zap.traversalLimit -= 8;
 
-  if (message._capnp.traversalLimit <= 0) {
+  if (message._zap.traversalLimit <= 0) {
     throw new Error(format(PTR_TRAVERSAL_LIMIT_EXCEEDED, p));
   }
 }

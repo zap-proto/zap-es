@@ -1,7 +1,7 @@
 // Based on https://github.com/jdiaz5513/capnp-ts (MIT - Julián Díaz)
 
 import { test, assert as t } from "vitest";
-import * as capnp from "capnp-es";
+import * as zap from "zap-es";
 
 import * as T from "../fixtures/test.ts";
 
@@ -19,7 +19,7 @@ test("TestEnum", () => {
 });
 
 test("TestAllTypes", () => {
-  const allTypes = new capnp.Message().initRoot(T.TestAllTypes);
+  const allTypes = new zap.Message().initRoot(T.TestAllTypes);
 
   allTypes.boolField = true;
   t.equal(allTypes.boolField, true);
@@ -104,7 +104,7 @@ test("TestAllTypes", () => {
 });
 
 test("TestConstructorName", () => {
-  const m = new capnp.Message();
+  const m = new zap.Message();
   const cls = m.initRoot(T.TestContructorName);
 
   t.equal(cls.$constructor, "");

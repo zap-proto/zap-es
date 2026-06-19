@@ -12,7 +12,7 @@ export interface _StructCtor extends _PointerCtor {
 }
 
 export interface StructCtor<T extends Struct> {
-  readonly _capnp: _StructCtor;
+  readonly _zap: _StructCtor;
 
   new (
     segment: Segment,
@@ -27,7 +27,7 @@ export interface _Struct extends _Pointer {
 }
 
 export class Struct extends Pointer<_Struct> {
-  static readonly _capnp = {
+  static readonly _zap = {
     displayName: "Struct" as string,
   };
 
@@ -50,25 +50,25 @@ export class Struct extends Pointer<_Struct> {
   ) {
     super(segment, byteOffset, depthLimit);
 
-    this._capnp.compositeIndex = compositeIndex;
-    this._capnp.compositeList = compositeIndex !== undefined;
+    this._zap.compositeIndex = compositeIndex;
+    this._zap.compositeList = compositeIndex !== undefined;
   }
 
   static [Symbol.toStringTag](): string {
-    return this._capnp.displayName;
+    return this._zap.displayName;
   }
 
   [Symbol.toStringTag](): string {
     return (
       `Struct_${super.toString()}` +
-      `${this._capnp.compositeIndex === undefined ? "" : `,ci:${this._capnp.compositeIndex}`}` +
+      `${this._zap.compositeIndex === undefined ? "" : `,ci:${this._zap.compositeIndex}`}` +
       ` > ${getContent(this).toString()}`
     );
   }
 }
 
 export class AnyStruct extends Struct {
-  static readonly _capnp = {
+  static readonly _zap = {
     displayName: "AnyStruct",
     id: "0",
     size: new ObjectSize(0, 0),

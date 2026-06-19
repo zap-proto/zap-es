@@ -1,4 +1,4 @@
-import * as schema from "../../capnp/schema";
+import * as schema from "../../zap/schema";
 import {
   getDisplayNamePrefix,
   getFullClassName,
@@ -12,7 +12,7 @@ import { createNestedNodeProperty, createValue } from "./struct";
 import { extractJSDocs } from "./helpers";
 
 /**
- * Generates TypeScript class definition for a Cap'n Proto interface node.
+ * Generates TypeScript class definition for a ZAP interface node.
  * Creates class members, properties, methods and nested type definitions.
  *
  * @param ctx - The file context containing schema information and output statements
@@ -50,7 +50,7 @@ export function generateInterfaceNode(
     ...nestedNodes.map((node) => createNestedNodeProperty(node)),
     `static readonly Client = ${fullClassName}$Client;
      static readonly Server = ${fullClassName}$Server;
-     static readonly _capnp = {
+     static readonly _zap = {
         displayName: "${displayNamePrefix}",
         id: "${nodeIdHex}",
         size: new $.ObjectSize(0, 0),

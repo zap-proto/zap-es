@@ -2,8 +2,8 @@
 
 @0xfc552bdafbb0b889;
 
-using Cxx = import "/capnp/c++.capnp";
-using Bar = import "import-bar.capnp";
+using Cxx = import "/zap/c++.zap";
+using Bar = import "import-bar.zap";
 
 $Cxx.namespace("Initrode");
 

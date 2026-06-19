@@ -43,7 +43,7 @@ export interface _Orphan {
  */
 export class Orphan<T extends Pointer> {
   /** If this member is not present then the orphan has already been adopted, or something went very wrong. */
-  _capnp?: _Orphan;
+  _zap?: _Orphan;
 
   byteOffset: number;
   segment: Segment;
@@ -54,31 +54,31 @@ export class Orphan<T extends Pointer> {
     this.segment = c.segment;
     this.byteOffset = c.byteOffset;
 
-    this._capnp = {} as _Orphan;
+    this._zap = {} as _Orphan;
 
     // Read vital info from the src pointer so we can reconstruct it during adoption.
-    this._capnp.type = getTargetPointerType(src);
+    this._zap.type = getTargetPointerType(src);
 
-    switch (this._capnp.type) {
+    switch (this._zap.type) {
       case PointerType.STRUCT: {
-        this._capnp.size = getTargetStructSize(src);
+        this._zap.size = getTargetStructSize(src);
 
         break;
       }
 
       case PointerType.LIST: {
-        this._capnp.length = getTargetListLength(src);
-        this._capnp.elementSize = getTargetListElementSize(src);
+        this._zap.length = getTargetListLength(src);
+        this._zap.elementSize = getTargetListElementSize(src);
 
-        if (this._capnp.elementSize === ListElementSize.COMPOSITE) {
-          this._capnp.size = getTargetCompositeListSize(src);
+        if (this._zap.elementSize === ListElementSize.COMPOSITE) {
+          this._zap.size = getTargetCompositeListSize(src);
         }
 
         break;
       }
 
       case PointerType.OTHER: {
-        this._capnp.capId = getCapabilityId(src);
+        this._zap.capId = getCapabilityId(src);
 
         break;
       }
@@ -100,7 +100,7 @@ export class Orphan<T extends Pointer> {
    * @param dst The destination pointer.
    */
   _moveTo(dst: T): void {
-    if (this._capnp === undefined) {
+    if (this._zap === undefined) {
       throw new Error(format(PTR_ALREADY_ADOPTED, this));
     }
 
@@ -114,31 +114,31 @@ export class Orphan<T extends Pointer> {
 
     const res = initPointer(this.segment, this.byteOffset, dst);
 
-    switch (this._capnp.type) {
+    switch (this._zap.type) {
       case PointerType.STRUCT: {
-        setStructPointer(res.offsetWords, this._capnp.size, res.pointer);
+        setStructPointer(res.offsetWords, this._zap.size, res.pointer);
         break;
       }
 
       case PointerType.LIST: {
         let { offsetWords } = res;
 
-        if (this._capnp.elementSize === ListElementSize.COMPOSITE) {
+        if (this._zap.elementSize === ListElementSize.COMPOSITE) {
           offsetWords--; // The tag word gets skipped.
         }
 
         setListPointer(
           offsetWords,
-          this._capnp.elementSize,
-          this._capnp.length,
+          this._zap.elementSize,
+          this._zap.length,
           res.pointer,
-          this._capnp.size,
+          this._zap.size,
         );
         break;
       }
 
       case PointerType.OTHER: {
-        setInterfacePointer(this._capnp.capId, res.pointer);
+        setInterfacePointer(this._zap.capId, res.pointer);
         break;
       }
 
@@ -148,29 +148,29 @@ export class Orphan<T extends Pointer> {
       }
     }
 
-    this._capnp = undefined;
+    this._zap = undefined;
   }
 
   dispose(): void {
     // FIXME: Should this throw?
-    if (this._capnp === undefined) {
+    if (this._zap === undefined) {
       return;
     }
 
-    switch (this._capnp.type) {
+    switch (this._zap.type) {
       case PointerType.STRUCT: {
         this.segment.fillZeroWords(
           this.byteOffset,
-          getWordLength(this._capnp.size),
+          getWordLength(this._zap.size),
         );
         break;
       }
 
       case PointerType.LIST: {
         const byteLength = getListByteLength(
-          this._capnp.elementSize,
-          this._capnp.length,
-          this._capnp.size,
+          this._zap.elementSize,
+          this._zap.length,
+          this._zap.size,
         );
         this.segment.fillZeroWords(this.byteOffset, byteLength);
         break;
@@ -181,7 +181,7 @@ export class Orphan<T extends Pointer> {
       }
     }
 
-    this._capnp = undefined;
+    this._zap = undefined;
   }
 
   [Symbol.for("nodejs.util.inspect.custom")](): string {
@@ -189,7 +189,7 @@ export class Orphan<T extends Pointer> {
       "Orphan_%d@%a,type:%s",
       this.segment.id,
       this.byteOffset,
-      this._capnp && this._capnp.type,
+      this._zap && this._zap.type,
     );
   }
 }

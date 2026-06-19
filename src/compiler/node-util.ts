@@ -1,6 +1,6 @@
 // Based on https://github.com/jdiaz5513/capnp-ts (MIT - Julián Díaz)
 
-import * as schema from "../capnp/schema";
+import * as schema from "../zap/schema";
 import { format } from "../util";
 
 import { CodeGeneratorFileContext } from "./generators";
@@ -49,7 +49,7 @@ export function getDisplayNamePrefix(node: schema.Node): string {
 }
 
 /**
- * Converts a Cap'n Proto schema node's display name into a TypeScript class name.
+ * Converts a ZAP schema node's display name into a TypeScript class name.
  * Transforms names like "foo:bar.baz.qux" into "Bar_Baz_Qux".
  *
  * @param node - Schema node containing the display name to convert
@@ -169,7 +169,7 @@ export function loadRequestedFile(
 
   const schema = lookupNode(ctx, file.id);
 
-  ctx.tsPath = schema.displayName.replace(/\.(zap|capnp)$/, "") + ".ts";
+  ctx.tsPath = schema.displayName.replace(/\.zap$/, "") + ".ts";
 
   return ctx;
 }
@@ -200,7 +200,7 @@ export function lookupNode(
  * Looks up source information for a Node in the schema by its ID.
  *
  * Source information includes documentation comments and other metadata
- * that was present in the original Cap'n Proto schema file.
+ * that was present in the original ZAP schema file.
  *
  * @param ctx - The file context containing all nodes and source info from the schema
  * @param lookup - Either a Node ID as a bigint, or an object containing an ID field
@@ -218,7 +218,7 @@ export function lookupNodeSourceInfo(
  * Determines whether the given field needs a concrete list class.
  *
  * This is currently the case for composite lists
- * (`$.CompositeList`) and lists of lists (`capnp.PointerList`).
+ * (`$.CompositeList`) and lists of lists (`zap.PointerList`).
  *
  * @param field The field to check.
  * @returns Returns `true` if the field requires a concrete list class initializer.

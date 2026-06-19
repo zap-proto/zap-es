@@ -97,7 +97,7 @@ export function getTagByte(
 }
 
 /**
- * Efficiently calculate the length of a packed Cap'n Proto message.
+ * Efficiently calculate the length of a packed ZAP message.
  *
  *
  * @param packed The packed message.
@@ -173,8 +173,8 @@ export function getZeroByteCount(
 }
 
 /**
- * Pack a section of a Cap'n Proto message into a compressed format. This will efficiently compress zero bytes (which
- * are common in idiomatic Cap'n Proto messages) into a compact form.
+ * Pack a section of a ZAP message into a compressed format. This will efficiently compress zero bytes (which
+ * are common in idiomatic ZAP messages) into a compact form.
  *
  * For stream-framed messages this is called once for the frame header and once again for each segment in the message.
  *
@@ -328,7 +328,7 @@ export function pack(
 }
 
 /**
- * Unpack a compressed Cap'n Proto message into a new ArrayBuffer.
+ * Unpack a compressed ZAP message into a new ArrayBuffer.
  *
  * Unlike the `pack` function, this is able to efficiently determine the exact size needed for the output buffer and
  * runs considerably more efficiently.

@@ -106,9 +106,5 @@ export class Text extends List<string> {
 }
 
 function textFromPointerUnchecked(pointer: Pointer): Text {
-  return new Text(
-    pointer.segment,
-    pointer.byteOffset,
-    pointer._capnp.depthLimit,
-  );
+  return new Text(pointer.segment, pointer.byteOffset, pointer._zap.depthLimit);
 }

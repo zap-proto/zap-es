@@ -26,7 +26,7 @@ export interface _ListCtor {
 }
 
 export interface ListCtor<T> {
-  readonly _capnp: _ListCtor;
+  readonly _zap: _ListCtor;
 
   new (segment: Segment, byteOffset: number, depthLimit?: number): List<T>;
 }
@@ -47,7 +47,7 @@ export interface Group<T> {
  */
 
 export class List<T> extends Pointer implements Array<T> {
-  static readonly _capnp: _ListCtor = {
+  static readonly _zap: _ListCtor = {
     displayName: "List<Generic>" as string,
     size: ListElementSize.VOID,
   };
@@ -349,7 +349,7 @@ export class List<T> extends Pointer implements Array<T> {
   }
 
   static [Symbol.toStringTag](): string {
-    return this._capnp.displayName;
+    return this._zap.displayName;
   }
 }
 

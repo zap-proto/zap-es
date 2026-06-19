@@ -1,18 +1,16 @@
 import { readFile } from "node:fs/promises";
-import * as capnpES from "capnp-es";
+import * as zapES from "zap-es";
 import { bench, run } from "mitata";
 
-const { AddressBook: capnpESStruct } = await import("./data/capnp/schema.ts");
-const capnpData = new Uint8Array(
-  await readFile(new URL("data/capnp/data.bin", import.meta.url)),
+const { AddressBook: zapESStruct } = await import("./data/zap/schema.ts");
+const zapData = new Uint8Array(
+  await readFile(new URL("data/zap/data.bin", import.meta.url)),
 );
 
 // Define benchmark
 function benchTick() {
   const res: any[] = [];
-  const obj = new capnpES.Message(capnpData, false, true).getRoot(
-    capnpESStruct,
-  );
+  const obj = new zapES.Message(zapData, false, true).getRoot(zapESStruct);
   for (const person of obj.people) {
     res.push(person.id, person.name, person.email);
     for (const phone of person.phones) {

@@ -4,13 +4,13 @@
 
 import { test, assert as t } from "vitest";
 
-import * as capnp from "capnp-es";
+import * as zap from "zap-es";
 
 import { ListMania } from "../fixtures/list-mania.ts";
 
 test("loop de loop", () => {
   t.doesNotThrow(() => {
-    const m = new capnp.Message();
+    const m = new zap.Message();
     const listMania = m.initRoot(ListMania);
 
     listMania._initCompositeList(1);
@@ -33,7 +33,7 @@ test("loop de loop", () => {
 
 test("1 of each list", () => {
   t.doesNotThrow(() => {
-    const m = new capnp.Message();
+    const m = new zap.Message();
     const listMania = m.initRoot(ListMania);
 
     listMania._initBoolList(1);
@@ -85,22 +85,22 @@ test("1 of each list", () => {
     uint32List.set(0, 1);
     uint64List.set(0, 1n);
 
-    capnp.utils.disown(boolList).dispose();
-    capnp.utils.disown(compositeList).dispose();
-    capnp.utils.disown(dataList).dispose();
-    capnp.utils.disown(float32List).dispose();
-    capnp.utils.disown(float64List).dispose();
-    capnp.utils.disown(int8List).dispose();
-    capnp.utils.disown(int16List).dispose();
-    capnp.utils.disown(int32List).dispose();
-    capnp.utils.disown(int64List).dispose();
-    capnp.utils.disown(interfaceList).dispose();
-    capnp.utils.disown(textList).dispose();
-    capnp.utils.disown(uint8List).dispose();
-    capnp.utils.disown(uint16List).dispose();
-    capnp.utils.disown(uint32List).dispose();
-    capnp.utils.disown(uint64List).dispose();
-    capnp.utils.disown(voidList).dispose();
+    zap.utils.disown(boolList).dispose();
+    zap.utils.disown(compositeList).dispose();
+    zap.utils.disown(dataList).dispose();
+    zap.utils.disown(float32List).dispose();
+    zap.utils.disown(float64List).dispose();
+    zap.utils.disown(int8List).dispose();
+    zap.utils.disown(int16List).dispose();
+    zap.utils.disown(int32List).dispose();
+    zap.utils.disown(int64List).dispose();
+    zap.utils.disown(interfaceList).dispose();
+    zap.utils.disown(textList).dispose();
+    zap.utils.disown(uint8List).dispose();
+    zap.utils.disown(uint16List).dispose();
+    zap.utils.disown(uint32List).dispose();
+    zap.utils.disown(uint64List).dispose();
+    zap.utils.disown(voidList).dispose();
 
     // Everything after the root pointer should be zero now.
 

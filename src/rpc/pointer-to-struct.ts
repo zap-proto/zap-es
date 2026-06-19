@@ -11,8 +11,8 @@ export function pointerToStruct(p: Pointer): Struct | null {
     return new Struct(
       p.segment,
       p.byteOffset,
-      p._capnp.depthLimit,
-      p._capnp.compositeIndex,
+      p._zap.depthLimit,
+      p._zap.compositeIndex,
     );
   }
   return null;

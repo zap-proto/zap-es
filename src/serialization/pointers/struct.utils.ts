@@ -54,7 +54,7 @@ const TMP_WORD = new DataView(new ArrayBuffer(8));
  * @param s The struct to initialize.
  */
 export function initStruct(size: ObjectSize, s: Struct): void {
-  if (s._capnp.compositeIndex !== undefined) {
+  if (s._zap.compositeIndex !== undefined) {
     throw new Error(format(PTR_INIT_COMPOSITE_STRUCT, s));
   }
 
@@ -75,7 +75,7 @@ export function initStructAt<T extends Struct>(
 ): T {
   const s = getPointerAs(index, StructClass, p);
 
-  initStruct(StructClass._capnp.size, s);
+  initStruct(StructClass._zap.size, s);
 
   return s;
 }
@@ -97,7 +97,7 @@ export function getInterfaceClientOrNullAt(index: number, s: Struct): Client {
 export function getInterfaceClientOrNull(p: Pointer): Client {
   let client: Client | null = null;
   const capId = getInterfacePointer(p);
-  const { capTable } = p.segment.message._capnp;
+  const { capTable } = p.segment.message._zap;
   if (capTable && capId >= 0 && capId < capTable.length) {
     client = capTable[capId];
   }
@@ -199,8 +199,8 @@ export function getAs<T extends Struct>(
   return new StructClass(
     s.segment,
     s.byteOffset,
-    s._capnp.depthLimit,
-    s._capnp.compositeIndex,
+    s._zap.depthLimit,
+    s._zap.compositeIndex,
   );
 }
 
@@ -245,7 +245,7 @@ export function getData(
 
   ps.byteOffset += index * 8;
 
-  const l = new Data(ps.segment, ps.byteOffset, s._capnp.depthLimit - 1);
+  const l = new Data(ps.segment, ps.byteOffset, s._zap.depthLimit - 1);
 
   if (isNull(l)) {
     if (defaultValue) {
@@ -449,21 +449,21 @@ export function getList<T>(
 
   ps.byteOffset += index * 8;
 
-  const l = new ListClass(ps.segment, ps.byteOffset, s._capnp.depthLimit - 1);
+  const l = new ListClass(ps.segment, ps.byteOffset, s._zap.depthLimit - 1);
 
   if (isNull(l)) {
     if (defaultValue) {
       copyFrom(defaultValue, l);
     } else {
-      _initList(ListClass._capnp.size, 0, l, ListClass._capnp.compositeSize);
+      _initList(ListClass._zap.size, 0, l, ListClass._zap.compositeSize);
     }
-  } else if (ListClass._capnp.compositeSize !== undefined) {
+  } else if (ListClass._zap.compositeSize !== undefined) {
     // If this is a composite list we need to be sure the composite elements are big enough to hold everything as
     // specified in the schema. If the new schema has added fields we'll need to "resize" (shallow-copy) the list so
     // it has room for the new fields.
 
     const srcSize = getTargetCompositeListSize(l);
-    const dstSize = ListClass._capnp.compositeSize;
+    const dstSize = ListClass._zap.compositeSize;
 
     if (
       dstSize.dataByteLength > srcSize.dataByteLength ||
@@ -481,7 +481,7 @@ export function getList<T>(
 
       setListPointer(
         res.offsetWords,
-        ListClass._capnp.size,
+        ListClass._zap.size,
         srcLength,
         res.pointer,
         dstSize,
@@ -566,7 +566,7 @@ export function getPointer(index: number, s: Struct): Pointer {
 
   ps.byteOffset += index * 8;
 
-  return new Pointer(ps.segment, ps.byteOffset, s._capnp.depthLimit - 1);
+  return new Pointer(ps.segment, ps.byteOffset, s._zap.depthLimit - 1);
 }
 
 export function getPointerAs<T extends Pointer>(
@@ -580,7 +580,7 @@ export function getPointerAs<T extends Pointer>(
 
   ps.byteOffset += index * 8;
 
-  return new PointerClass(ps.segment, ps.byteOffset, s._capnp.depthLimit - 1);
+  return new PointerClass(ps.segment, ps.byteOffset, s._zap.depthLimit - 1);
 }
 
 export function getPointerSection(s: Struct): Pointer {
@@ -592,7 +592,7 @@ export function getPointerSection(s: Struct): Pointer {
 }
 
 export function getSize(s: Struct): ObjectSize {
-  if (s._capnp.compositeIndex !== undefined) {
+  if (s._zap.compositeIndex !== undefined) {
     // For composite lists the object size is stored in a tag word right before the content.
 
     const c = getContent(s, true);
@@ -617,7 +617,7 @@ export function getStruct<T extends Struct>(
     if (defaultValue) {
       copyFrom(defaultValue, t);
     } else {
-      initStruct(StructClass._capnp.size, t);
+      initStruct(StructClass._zap.size, t);
     }
   } else {
     validate(PointerType.STRUCT, t);
@@ -629,10 +629,10 @@ export function getStruct<T extends Struct>(
     // data and pointer sections. This will unfortunately leave a "hole" of zeroes in the message, but that hole will
     // at least compress well.
     if (
-      ts.dataByteLength < StructClass._capnp.size.dataByteLength ||
-      ts.pointerLength < StructClass._capnp.size.pointerLength
+      ts.dataByteLength < StructClass._zap.size.dataByteLength ||
+      ts.pointerLength < StructClass._zap.size.pointerLength
     ) {
-      resize(StructClass._capnp.size, t);
+      resize(StructClass._zap.size, t);
     }
   }
 
@@ -773,7 +773,7 @@ export function initData(index: number, length: number, s: Struct): Data {
 
   ps.byteOffset += index * 8;
 
-  const l = new Data(ps.segment, ps.byteOffset, s._capnp.depthLimit - 1);
+  const l = new Data(ps.segment, ps.byteOffset, s._zap.depthLimit - 1);
 
   erase(l);
 
@@ -794,11 +794,11 @@ export function initList<T>(
 
   ps.byteOffset += index * 8;
 
-  const l = new ListClass(ps.segment, ps.byteOffset, s._capnp.depthLimit - 1);
+  const l = new ListClass(ps.segment, ps.byteOffset, s._zap.depthLimit - 1);
 
   erase(l);
 
-  _initList(ListClass._capnp.size, length, l, ListClass._capnp.compositeSize);
+  _initList(ListClass._zap.size, length, l, ListClass._zap.compositeSize);
 
   return l;
 }

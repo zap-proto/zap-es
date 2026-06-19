@@ -9,8 +9,8 @@ export function PointerList<T extends Pointer>(
   PointerClass: PointerCtor<T>,
 ): ListCtor<T> {
   return class extends List<T> {
-    static readonly _capnp: _ListCtor = {
-      displayName: `List<${PointerClass._capnp.displayName}>`,
+    static readonly _zap: _ListCtor = {
+      displayName: `List<${PointerClass._zap.displayName}>`,
       size: ListElementSize.POINTER,
     };
 
@@ -19,7 +19,7 @@ export function PointerList<T extends Pointer>(
       return new PointerClass(
         c.segment,
         c.byteOffset + index * 8,
-        this._capnp.depthLimit - 1,
+        this._zap.depthLimit - 1,
       );
     }
 

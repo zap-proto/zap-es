@@ -36,8 +36,8 @@ test("dumpBuffer()", () => {
 
   // Gratuitous? Yes. Awesome? Yes.
 
-  for (let i = 0; i < 11; i++) buf1[i + 1] = "Cap'n Proto".charCodeAt(i);
-  for (let i = 0; i < 11; i++) buf1[i + 19] = "Cap'n Proto".charCodeAt(i);
+  for (let i = 0; i < 3; i++) buf1[i + 1] = "ZAP".charCodeAt(i);
+  for (let i = 0; i < 3; i++) buf1[i + 19] = "ZAP".charCodeAt(i);
   buf1[0x10] = 0x11;
   buf1[0x11] = 0x05;
 
@@ -45,8 +45,8 @@ test("dumpBuffer()", () => {
     util.dumpBuffer(buf1),
     `
 === buffer[64] ===
-00000000: 00 43 61 70 27 6e 20 50  72 6f 74 6f 00 00 00 00    ·Cap'n Proto····
-00000010: 11 05 00 43 61 70 27 6e  20 50 72 6f 74 6f 00 00    ···Cap'n Proto··
+00000000: 00 5a 41 50 00 00 00 00  00 00 00 00 00 00 00 00    ·ZAP············
+00000010: 11 05 00 5a 41 50 00 00  00 00 00 00 00 00 00 00    ···ZAP··········
 00000020: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00    ················
 00000030: 00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00    ················
 `,

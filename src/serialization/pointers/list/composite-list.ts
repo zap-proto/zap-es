@@ -9,9 +9,9 @@ export function CompositeList<T extends Struct>(
   CompositeClass: StructCtor<T>,
 ): ListCtor<T> {
   return class extends List<T> {
-    static readonly _capnp: _ListCtor = {
-      compositeSize: CompositeClass._capnp.size,
-      displayName: `List<${CompositeClass._capnp.displayName}>`,
+    static readonly _zap: _ListCtor = {
+      compositeSize: CompositeClass._zap.size,
+      displayName: `List<${CompositeClass._zap.displayName}>`,
       size: ListElementSize.COMPOSITE,
     };
 
@@ -19,7 +19,7 @@ export function CompositeList<T extends Struct>(
       return new CompositeClass(
         this.segment,
         this.byteOffset,
-        this._capnp.depthLimit - 1,
+        this._zap.depthLimit - 1,
         index,
       );
     }

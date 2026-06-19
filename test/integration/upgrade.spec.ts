@@ -3,7 +3,7 @@
 // A collection of tests regarding protocol upgrade/downgrade behavior.
 
 import { test, assert as t } from "vitest";
-import * as capnp from "capnp-es";
+import * as zap from "zap-es";
 
 import { Upgrade as UpgradeV1 } from "../fixtures/upgrade-v1.ts";
 import { Upgrade as UpgradeV2 } from "../fixtures/upgrade-v2.ts";
@@ -15,7 +15,7 @@ test("schema upgrade with legacy data", () => {
   // the equivalent zero value for each of those fields. The test is repeated once for Message's `getRoot` and again for
   // `getSelfReference` in the UpgradeV2 class.
 
-  const m = new capnp.Message();
+  const m = new zap.Message();
   const u1 = m.initRoot(UpgradeV1);
 
   u1.legacyId = 0x55_55;
@@ -32,10 +32,7 @@ test("schema upgrade with legacy data", () => {
   const u2 = m.getRoot(UpgradeV2);
 
   // t.comment("should null out the self-reference pointers");
-  t.ok(
-    capnp.utils.isNull(v1Child),
-    "should null out the self-reference pointer",
-  );
+  t.ok(zap.utils.isNull(v1Child), "should null out the self-reference pointer");
   t.ok(
     m.getSegment(0).isWordZero(0x18),
     "should null out the self-reference pointer",
@@ -63,10 +60,7 @@ test("schema upgrade with legacy data", () => {
     v2Child.newHotnessName = "HIHI";
   }, "should be able to set new child fields");
 
-  t.ok(
-    capnp.utils.isNull(v1Child),
-    "should not be able to access the old child",
-  );
+  t.ok(zap.utils.isNull(v1Child), "should not be able to access the old child");
   t.equal(v2Child.legacyId, 0x66_66, "should preserve the child's legacy id");
   t.equal(
     v2Child.legacyName,

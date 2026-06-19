@@ -1,5 +1,5 @@
-import * as $ from "capnp-es";
-export declare const _capnpFileId = 17229464571574614228n;
+import * as $ from "zap-es";
+export declare const _zapFileId = 17229464571574614228n;
 export declare const Person_PhoneNumber_Type: {
   readonly MOBILE: 0;
   readonly HOME: 1;
@@ -12,7 +12,7 @@ export declare class Person_PhoneNumber extends $.Struct {
     readonly HOME: 1;
     readonly WORK: 2;
   };
-  static readonly _capnp: {
+  static readonly _zap: {
     displayName: string;
     id: string;
     size: $.ObjectSize;
@@ -39,7 +39,7 @@ export declare class Person_Employment extends $.Struct {
   static readonly EMPLOYER: 1;
   static readonly SCHOOL: 2;
   static readonly SELF_EMPLOYED: 3;
-  static readonly _capnp: {
+  static readonly _zap: {
     displayName: string;
     id: string;
     size: $.ObjectSize;
@@ -59,7 +59,7 @@ export declare class Person_Employment extends $.Struct {
 }
 export declare class Person extends $.Struct {
   static readonly PhoneNumber: typeof Person_PhoneNumber;
-  static readonly _capnp: {
+  static readonly _zap: {
     displayName: string;
     id: string;
     size: $.ObjectSize;
@@ -82,7 +82,7 @@ export declare class Person extends $.Struct {
   toString(): string;
 }
 export declare class AddressBook extends $.Struct {
-  static readonly _capnp: {
+  static readonly _zap: {
     displayName: string;
     id: string;
     size: $.ObjectSize;

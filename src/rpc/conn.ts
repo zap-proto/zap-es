@@ -5,7 +5,7 @@ import { RefCount } from "./refcount";
 import { Client, isSameClient, clientFromResolution } from "./client";
 import { Transport } from "./transport";
 import { Question, QuestionState } from "./question";
-import { Return, Payload, CapDescriptor, MessageTarget } from "../capnp/rpc";
+import { Return, Payload, CapDescriptor, MessageTarget } from "../zap/rpc";
 import { RPCError } from "./rpc-error";
 import { AnswerEntry, Answer } from "./answer";
 import {
@@ -32,7 +32,7 @@ import { PipelineClient } from "./pipeline-client";
 import { FixedAnswer } from "./fixed-answer";
 import { LocalAnswerClient } from "./local-answer-client";
 import { Finalize } from "./finalize";
-import { Message as RPCMessage } from "../capnp/rpc";
+import { Message as RPCMessage } from "../zap/rpc";
 import { MethodError } from "./method-error";
 import { Registry } from "./registry";
 import { joinAnswer } from "./join";
@@ -363,7 +363,7 @@ export class Conn {
           break;
         }
         case CapDescriptor.SENDER_PROMISE: {
-          // Apparently, this is a hack, see https://sourcegraph.com/github.com/capnproto/go-capnproto2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/rpc.go#L549
+          // Apparently, this is a hack, see https://sourcegraph.com/github.com/zap/go-zap2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/rpc.go#L549
           const id = desc.senderPromise;
           const client = this.addImport(id);
           msg.addCap(client);
@@ -546,7 +546,7 @@ export class Conn {
     s: Segment,
     init: (length: number) => List<CapDescriptor>,
   ): void {
-    const msgtab = s.message._capnp.capTable;
+    const msgtab = s.message._zap.capTable;
     if (!msgtab) {
       return;
     }
@@ -566,7 +566,7 @@ export class Conn {
   descriptorForClient(desc: CapDescriptor, _client: Client): void {
     {
       dig: for (let client = _client; ; ) {
-        // cf. https://sourcegraph.com/github.com/capnproto/go-capnproto2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/introspect.go#L113
+        // cf. https://sourcegraph.com/github.com/zap/go-zap2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/introspect.go#L113
         // TODO: fulfiller.EmbargoClient
         // TODO: embargoClient
         // TODO: queueClient

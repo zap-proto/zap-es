@@ -41,13 +41,13 @@ export class Question<P extends Struct, R extends Struct> implements Answer<R> {
   // start signals the question has been sent
   start(): void {
     // TODO: send finishMessage in case it gets cancelled
-    // see https://sourcegraph.com/github.com/capnproto/go-capnproto2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/question.go#L77
+    // see https://sourcegraph.com/github.com/zap/go-zap2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/question.go#L77
   }
 
   // fulfill is called to resolve a question successfully.
   // The caller must be holding onto q.conn.mu.
   fulfill(obj: Pointer): void {
-    // TODO: derived, see https://sourcegraph.com/github.com/capnproto/go-capnproto2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/question.go#L105
+    // TODO: derived, see https://sourcegraph.com/github.com/zap/go-zap2@e1ae1f982d9908a41db464f02861a850a0880a5a/-/blob/rpc/question.go#L105
     if (this.state !== QuestionState.IN_PROGRESS) {
       throw new Error(RPC_FULFILL_ALREADY_CALLED);
     }

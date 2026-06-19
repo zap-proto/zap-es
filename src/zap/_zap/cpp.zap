@@ -1,4 +1,4 @@
-# Source: https://github.com/capnproto/capnproto/blob/v1.0.2/c%2B%2B/src/capnp/c++.capnp
+# Source: https://github.com/capnproto/capnproto/blob/v1.0.2/c++/src/capnp/c++.capnp
 
 # Copyright (c) 2013-2014 Sandstorm Development Group, Inc. and contributors
 # Licensed under the MIT License:
@@ -23,7 +23,7 @@
 
 @0xbdf87d7bb8304e82;
 # original: @0xbdf87d7bb8304e81;
-$namespace("capnp::annotations");
+$namespace("zap::annotations");
 
 annotation namespace(file): Text;
 annotation name(field, enumerant, struct, enum, interface, method, param, group, union): Text;

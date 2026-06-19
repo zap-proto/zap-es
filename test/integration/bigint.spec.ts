@@ -1,12 +1,12 @@
 // Based on https://github.com/jdiaz5513/capnp-ts (MIT - Julián Díaz)
 
 import { test, assert as t } from "vitest";
-import * as capnp from "capnp-es";
+import * as zap from "zap-es";
 
 import { BigIntBag } from "../fixtures/bigintbag.ts";
 
 test("64 bit with bigint support", () => {
-  const message = new capnp.Message();
+  const message = new zap.Message();
   const b = message.initRoot(BigIntBag);
   const unsigned = 999_999n;
   const signed = -999_999n;
