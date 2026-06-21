@@ -1,0 +1,18 @@
+zap-es — part of the ZAP Protocol (github.com/zap-proto)
+
+This product includes software developed by the capnp-ts / capnp-es projects:
+  capnp-ts — https://github.com/jdiaz5513/capnp-ts
+  Copyright (c) 2017 Julián Díaz (jdiaz5513) and contributors (incl. fasterthanlime)
+  capnp-es — https://github.com/unjs/capnp-es
+  Copyright (c) 2024 Pooya Parsa <pooya@pi0.io>
+  Licensed under the MIT License (see LICENSE).
+
+Portions of the serialization layer are derived from Cap'n Proto and remain
+Copyright (c) 2013-2014 Sandstorm Development Group, Inc. and contributors
+(https://github.com/capnproto/capnproto). Individual files carry an upstream
+attribution header.
+
+ZAP is a derivative work: a brand-neutral fork providing an early TypeScript
+ZAP serialization library. This package is deprecated and superseded by
+@zap-proto/zap (repo github.com/zap-proto/ts).
+Modifications Copyright (c) 2024 Pooya Parsa; (c) 2025 Lux Industries Inc.
